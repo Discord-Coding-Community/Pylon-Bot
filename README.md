@@ -19,6 +19,6 @@ This repo was created for use with storing and sharing code to use with [Pylon.b
 ## Credits
 
  - [EzMoney](https://github.com/arshadio/ezmoney-pylon) - [arshadio](https://github.com/arshadio/)
- - [Database](https://github.com/FlorianStrobl/Discord-Pylon-Bot/blob/master/Scripts/Functions/Database.ts) - [FlorianStrobl](https://github.com/FlorianStrobl)
- - [Pylon-Twitter-Sub](https://github.com/Sickae/pylon-twitter-sub) - [Sickae](https://github.com/Sickae/)
- - [Pylon-Reddit](https://discord.com/channels/530557949098065930/695065184615792710/797328463961915394) - [Asian Nate#8962]()
+ - [Pylon Database](https://github.com/FlorianStrobl/Discord-Pylon-Bot/blob/master/Scripts/Functions/Database.ts) - [FlorianStrobl](https://github.com/FlorianStrobl)
+ - [Pylon Twitter Sub](https://github.com/Sickae/pylon-twitter-sub) - [Sickae](https://github.com/Sickae/)
+ - [Pylon Reddit](https://discord.com/channels/530557949098065930/695065184615792710/797328463961915394) - [Asian Nate#8962]()
