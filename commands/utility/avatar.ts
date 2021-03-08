@@ -1,27 +1,21 @@
 let f = discord.command.filters;
 
-const USER_PERMS = f.and(
-  f.canSendMessages(),
-  f.canEmbedLinks(),
-  f.canUseExternalEmojis(),
-  f.canUseVoiceActivity()
-);
+const PFP_PERMS = f.and(f.canSendMessages());
 
 let reactions = {
   prev: discord.decor.Emojis.ARROW_DOWN as string,
   next: discord.decor.Emojis.ARROW_UP as string
 };
 
-const prefix = 'p.';
-const cmd = new discord.command.CommandGroup({
-  defaultPrefix: prefix
+const PFP_COMMAND = new discord.command.CommandGroup({
+  defaultPrefix: '~',
+  filters: PFP_PERMS
 });
-cmd.on(
+
+PFP_COMMAND.on(
   {
     name: 'avatar',
-    aliases: ['ava', 'pfp'],
-    category: 'Utility',
-    filters: USER_PERMS
+    aliases: ['ava', 'pfp']
   } as AltCommandOptions,
   (ctx) => ({ p: ctx.userOptional() }),
   async (message, { p }) => {

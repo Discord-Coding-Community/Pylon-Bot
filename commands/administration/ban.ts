@@ -1,58 +1,63 @@
+const LOGGING_CHANNEL = ' ';
+const TITLE = '**__User Banned__**';
 let f = discord.command.filters;
-const ADMIN_PERMS = f.and(
-  f.canViewAuditLog(),
-  f.canBanMembers(),
-  f.canKickMembers(),
-  f.canViewGuildInsights()
-);
-const prefix = 'p.';
-const cmd = new discord.command.CommandGroup({
-  defaultPrefix: prefix
-});
+const BAN_PERMS = f.and(f.canBanMembers());
 
-cmd.on(
+const BanCommand: discord.command.CommandGroup = new discord.command.CommandGroup(
+  {
+    defaultPrefix: '~',
+    filters: BAN_PERMS
+  }
+);
+
+BanCommand.on(
   {
     name: 'ban',
-    aliases: ['b'],
-    filters: ADMIN_PERMS
+    aliases: ['b']
   },
   (args) => ({
     user: args.user(),
     reason: args.textOptional()
   }),
   async (message, { user, reason }) => {
-    const guild = await message.getGuild();
+    const guild = await discord.getGuild();
+    const channel = await discord.getGuildTextChannel(LOGGING_CHANNEL);
 
     await guild.createBan(user, {
       deleteMessageDays: 7,
       reason: reason || undefined
     });
 
-    const richEmbed = new discord.Embed();
-    richEmbed.setTitle('ModLog');
-    richEmbed.setColor(0x00ff00);
-    richEmbed.setDescription('User Banned');
-    richEmbed.setFooter({
-      text: 'https://pylon.bot'
+    const logger = new discord.Embed();
+    logger.setTitle(TITLE);
+    logger.setColor(0x00ff00);
+    logger.setFooter({
+      text: guild.name
     });
-    richEmbed.setThumbnail({ url: user.getAvatarUrl() });
-    richEmbed.addField({
+    logger.setThumbnail({ url: user.getAvatarUrl() });
+    logger.addField({
       name: 'User Name',
       value: `${user.username}`,
       inline: false
     });
-    richEmbed.addField({
+    logger.addField({
       name: 'User ID',
       value: `${user.id}`,
       inline: false
     });
-    richEmbed.addField({
+    logger.addField({
       name: 'Reason',
       value: `${reason}`,
       inline: false
     });
-    richEmbed.setTimestamp(new Date().toISOString());
-    await message.reply(richEmbed);
-    await message.addReaction('✅');
+    logger.setTimestamp(new Date().toISOString());
+
+    if (guild && channel) {
+      await message.addReaction('✅');
+      channel?.sendMessage({
+        content: '',
+        embed: logger
+      });
+    }
   }
 );

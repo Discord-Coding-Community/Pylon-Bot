@@ -1,28 +1,22 @@
-import './menu/commands';
-
 let f = discord.command.filters;
-global.USER_PERMS = f.and(
-  f.canSendMessages(),
-  f.canEmbedLinks(),
-  f.canUseExternalEmojis(),
-  f.canUseVoiceActivity()
-);
-const prefix = 'p.';
+const MENU_PERMS = f.and(f.canSendMessages());
 
 var MSGID = '';
 var AUTHORID = '';
 var guildId = 'GUILD ID';
 
-const cmd = new discord.command.CommandGroup({
-  defaultPrefix: prefix
-});
+const MenuCommand: discord.command.CommandGroup = new discord.command.CommandGroup(
+  {
+    defaultPrefix: '~',
+    filters: MENU_PERMS
+  }
+);
 
-cmd.raw(
+MenuCommand.raw(
   {
     name: 'menu',
     aliases: ['help', 'h', 'Menu', 'Help', 'H'],
-    description: 'Displays the Pylon Menu',
-    filters: USER_PERMS
+    description: 'Displays the Pylon Menu'
   },
   async (msg) => {
     const menu = new discord.Embed();
@@ -30,9 +24,11 @@ cmd.raw(
     await menu.setTitle('Pylon Menu');
     await menu.setDescription(
       `Select an option.
-1️⃣: Pylon Commands
-2️⃣: Potato Economy
-3️⃣: Rules and TOS
+1️⃣: Administration Commands
+2️⃣: Moderatrion Commands
+3️⃣: Social Commands
+4️⃣: Utility Commands
+5️⃣: Slash Commands
 `
     );
 
@@ -41,6 +37,8 @@ cmd.raw(
     await thehelpmsg.addReaction('1️⃣');
     await thehelpmsg.addReaction('2️⃣');
     await thehelpmsg.addReaction('3️⃣');
+    await thehelpmsg.addReaction('4️⃣');
+    await thehelpmsg.addReaction('5️⃣');
     await thehelpmsg.addReaction('❌');
 
     MSGID = thehelpmsg.id;
@@ -62,8 +60,10 @@ discord.registerEventHandler('MESSAGE_REACTION_ADD', async (theReaction) => {
   ) {
     const option1 = new discord.Embed();
     await option1.setColor(0x3f888f);
-    await option1.setTitle('Pylon Menu');
-    await option1.setDescription('Need a list of commands? Use `[p]commands`');
+    await option1.setTitle('Administration Commands');
+    await option1.setDescription(
+      "`kick <@user>`: Kicks a user from the guild.\n`ban <@user>`: Bans a user from the guild.\n`banlist:` Displays the guild's ban list.\n`warn <@user> <reason>:` Warn a user for a specified reason.\n`get-warns <@user>:` Get warn info about a user.\n`delete-warn <@user>:` Delete all the cases from a user.\n\nFields marked with the `<>` flags are required.\nFileds marked with the `[]` flags are optional.\nDo not include the `<>` and/or `[]` flags in the command."
+    );
     const theMsg2 = await theMsg.reply(option1);
     MSGID = '';
     AUTHORID = '';
@@ -75,13 +75,13 @@ discord.registerEventHandler('MESSAGE_REACTION_ADD', async (theReaction) => {
     theReaction.messageId == MSGID &&
     theReaction.member.user.id == AUTHORID
   ) {
-    const option2 = new discord.Embed();
-    await option2.setColor(0x3f888f);
-    await option2.setTitle('Pylon Menu');
-    await option2.setDescription(
-      'Need a list of Potato Ecomony commands? Use `[p]potato help`'
+    const option1 = new discord.Embed();
+    await option1.setColor(0x3f888f);
+    await option1.setTitle('Moderation Commands');
+    await option1.setDescription(
+      '`announce <message>`: Send a message to the guild announcements channel.\n`mute <@user> <time>`: Mute a user for a specified amount of time.\n`unmute <@user>`: Unmute a user.\n\nFields marked with the `<>` flags are required.\nFileds marked with the `[]` flags are optional.\nDo not include the `<>` and/or `[]` flags in the command.'
     );
-    const theMsg3 = await theMsg.reply(option2);
+    const theMsg2 = await theMsg.reply(option1);
     MSGID = '';
     AUTHORID = '';
     await theMsg.delete();
@@ -91,18 +91,50 @@ discord.registerEventHandler('MESSAGE_REACTION_ADD', async (theReaction) => {
     theReaction.messageId == MSGID &&
     theReaction.member.user.id == AUTHORID
   ) {
-    const option3 = new discord.Embed();
-    await option3.setColor(0x3f888f);
-    await option3.setTitle('Pylon Menu');
-    await option3.setDescription(
-      '・ **NO** personal attacks, accusations, harassment,\nsexism, racism, or general malicious behavior. This\nincludes, but is not limited to comments that we deem\nto be of this nature.\n・ Please use the correct channels, all spam of\ncommands should also only be in the botspam\nchannel.\n・ **DO NOT** ping or **DM** the Mods or Admins\nunless they are needed.\n・ **NO** unpleasant behavior, this includes but is not\nlimited to: spamming chats, posting invite links, self \nbots, hacking, trolling, raids, etc.\n・ **DO NOT** beg for roles.\n・ **DO NOT** falsely report users.\n・ **DO NOT** ping people without a good reason.\n・ You need to follow discords terms of service\nlocated at: `https://discord.com/terms`\n**By joining this server, you have agreed to all of the**\n**above, and by using Discord you agree to using the**\n**TOS**'
+    const option2 = new discord.Embed();
+    await option2.setColor(0x3f888f);
+    await option2.setTitle('Social Commands');
+    await option2.setDescription(
+      '`reddit <subreddit>`:\n`twitter sub <channel.mention> <twitter.handle>`: Add a Twitter Feed to a specified channel. *[Requires Administrator Rank]*\n`twitter unsub <channel.mention> <twitter.handle>`: Remove a Twitter feed from a specified channel. *[Requiures Administrator Rank]*\n`twitter list`: Display a list of all currently subscribes Twitter feeds.\n\nFields marked with the `<>` flags are required.\nFileds marked with the `[]` flags are optional.\nDo not include the `<>` and/or `[]` flags in the command.\n\n**Note**:\nTwitter commands require admin rank to use.'
     );
-
-    const theMsg4 = await theMsg.reply(option3);
+    const theMsg3 = await theMsg.reply(option2);
     MSGID = '';
     AUTHORID = '';
     await theMsg.delete();
   }
+  if (
+    theReaction.emoji.name == '4️⃣' &&
+    theReaction.messageId == MSGID &&
+    theReaction.member.user.id == AUTHORID
+  ) {
+    const option2 = new discord.Embed();
+    await option2.setColor(0x3f888f);
+    await option2.setTitle('Twitter Commands');
+    await option2.setDescription(
+      "`menu`: Displays the Pylon Help Menu.\n`search <input>`: Search for something using the worlfram api.\n`ping`: Displays Pylon's latency.\n`info [user.mention]`: Displays a user's info.\n\nFields marked with the `<>` flags are required.\nFileds marked with the `[]` flags are optional.\nDo not include the `<>` and/or `[]` flags in the command.'"
+    );
+    const theMsg3 = await theMsg.reply(option2);
+    MSGID = '';
+    AUTHORID = '';
+    await theMsg.delete();
+  }
+  if (
+    theReaction.emoji.name == '5️⃣' &&
+    theReaction.messageId == MSGID &&
+    theReaction.member.user.id == AUTHORID
+  ) {
+    const option2 = new discord.Embed();
+    await option2.setColor(0x3f888f);
+    await option2.setTitle('Slash Commands');
+    await option2.setDescription(
+      "`avatar [@user]:` Get a user\'s avatar.\n`search <query>`: Perform a search using the Wolframn API.\n\nFeilds marked with the `<>` flags are required.\nFields marked with the `[]` flags are optional.\nDo not include the `<>` and/or `[]` flags in the command.'"
+    );
+    const theMsg3 = await theMsg.reply(option2);
+    MSGID = '';
+    AUTHORID = '';
+    await theMsg.delete();
+  }
+
   if (
     theReaction.emoji.name == '❌' &&
     theReaction.messageId == MSGID &&
@@ -111,7 +143,7 @@ discord.registerEventHandler('MESSAGE_REACTION_ADD', async (theReaction) => {
     const option8 = new discord.Embed();
     await option8.setColor(0x3f888f);
     await option8.setTitle('**Canceled**');
-    await option8.setDescription(`You chanceled the command selection`);
+    await option8.setDescription(`You canceled the command selection`);
 
     const theMsg4 = await theMsg.reply(option8);
     MSGID = '';

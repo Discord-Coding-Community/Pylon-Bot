@@ -1,15 +1,14 @@
-const ADMIN_ROLE = ' ';
+const ADMIN_ROLE_ID = ' ';
 const TWITTER_API = ' ';
 const TWITTER_BEARER =
   ' ';
 const TWITTER_ICON =
   'https://cdn2.iconfinder.com/data/icons/minimalism/512/twitter.png';
-const prefix = 'p.';
 const TwitterSubCfg = {
   TWITTER_API_KEY: TWITTER_API,
   TWITTER_BEARER_TOKEN: TWITTER_BEARER,
   ICON_URL: TWITTER_ICON,
-  REQUIRED_ROLE_ID: ADMIN_ROLE
+  REQUIRED_ROLE_ID: ADMIN_ROLE_ID
 };
 
 class TwitterClient {
@@ -65,7 +64,7 @@ class TwitterClient {
 }
 
 const cmd = new discord.command.CommandGroup({
-  defaultPrefix: prefix,
+  defaultPrefix: '~',
   filters:
     TwitterSubCfg.REQUIRED_ROLE_ID?.length > 0
       ? discord.command.filters.hasRole(TwitterSubCfg.REQUIRED_ROLE_ID)

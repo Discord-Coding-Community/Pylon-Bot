@@ -1,14 +1,13 @@
 let f = discord.command.filters;
-global.USER_PERMS = f.and(
-  f.canSendMessages(),
-  f.canEmbedLinks(),
-  f.canUseExternalEmojis(),
-  f.canUseVoiceActivity()
+const INFO_PERMS = f.and(f.canSendMessages());
+
+const InfoCommands: discord.command.CommandGroup = new discord.command.CommandGroup(
+  {
+    defaultPrefix: '~',
+    filters: INFO_PERMS
+  }
 );
-const prefix = 'p.';
-const cmd = new discord.command.CommandGroup({
-  defaultPrefix: prefix
-});
+
 const timeMap = new Map([
   ['decade', 1000 * 60 * 60 * 24 * 365 * 10],
   ['year', 1000 * 60 * 60 * 24 * 365],
@@ -64,12 +63,11 @@ function decomposeSnowflake(snowflake: string) {
   return res;
 }
 
-cmd.raw(
+InfoCommands.raw(
   {
     name: 'guild',
     aliases: ['g'],
-    description: 'Displays the guild info',
-    filters: USER_PERMS
+    description: 'Displays the guild info'
   },
   async (message) => {
     let edmsg = message.reply('<a:loading:735794724480483409>');
@@ -288,12 +286,11 @@ cmd.raw(
   }
 );
 
-cmd.on(
+InfoCommands.on(
   {
     name: 'info',
     aliases: ['i', 'user'],
-    description: 'Displays the user info of a specified user',
-    filters: USER_PERMS
+    description: 'Displays the user info of a specified user'
   },
   (ctx) => ({ user: ctx.userOptional() }),
   async (msg, { user }) => {
