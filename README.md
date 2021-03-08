@@ -1,9 +1,10 @@
-[![](https://img.shields.io/github/release-date/New-Horizon-Network/Pylon-Bot)](https://github.com/New-Horizon-Network/Pylon-Bot/releases)
-[![](https://img.shields.io/github/issues-pr-raw/New-Horizon-Network/Pylon-Bot)](https://github.com/New-Horizon-Network/Pylon-Bot)
-[![](https://img.shields.io/github/issues-raw/New-Horizon-Network/Pylon-Bot)](https://github.com/New-Horizon-Network/Pylon-Bot/blob/master/.github/ISSUE_TEMPLATE/bug_report.md)
-[![](https://img.shields.io/github/last-commit/New-Horizon-Network/Pylon-Bot/master)](https://github.com/New-Horizon-Network/Pylon-Bot)
-[![](https://img.shields.io/github/languages/code-size/New-Horizon-Network/Pylon-Bot)](https://github.com/New-Horizon-Network/Pylon-Bot)
-[![](https://discordapp.com/api/guilds/765992820841513050/widget.png?style=shield)](https://discord.gg/neb8Avfsgg)
+[![Release Date](https://img.shields.io/github/release-date/New-Horizon-Network/Pylon-Bot)](https://github.com/New-Horizon-Network/Pylon-Bot/releases)
+
+[![Commits](https://img.shields.io/github/last-commit/New-Horizon-Network/Pylon-Bot/master)](https://github.com/New-Horizon-Network/Pylon-Bot)
+
+[![Language](https://img.shields.io/github/languages/code-size/New-Horizon-Network/Pylon-Bot)](https://github.com/New-Horizon-Network/Pylon-Bot)
+
+[![Discord Coding Community](https://discordapp.com/api/guilds/801125364218200074/widget.png?style=shield)](https://dsc.gg/discord-coding-community)
 
 # Pylon.bot
 New Horizon Network's [Pylon.bot](https://Pylon.bot)
