@@ -2,6 +2,7 @@ import './modules/functions';
 import './modules/logger';
 
 import './events/message';
+import './events/publish';
 
 import './commands/administration/kick';
 import './commands/administration/banlist';
