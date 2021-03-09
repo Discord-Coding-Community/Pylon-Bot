@@ -4,7 +4,7 @@
 [![Discord Coding Community](https://discordapp.com/api/guilds/801125364218200074/widget.png?style=shield)](https://dsc.gg/discord-coding-community)
 
 # Pylon.bot
-New Horizon Network's [Pylon.bot](https://Pylon.bot)
+DCC Pylon App for use with [Pylon.bot](https://Pylon.bot)
 
 ![](https://raw.githubusercontent.com/New-Horizon-Network/Pylon-Bot/master/images/Screenshot_2020-11-01_02-25-13.png)
 
