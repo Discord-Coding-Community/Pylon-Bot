@@ -1,10 +1,9 @@
-let f = discord.command.filters;
-const REDDIT_PERMS = f.and(f.canSendMessages());
+import { command_prefix, MEMBER_PERMS } from '../../config/configs';
 
 const RedditCommand: discord.command.CommandGroup = new discord.command.CommandGroup(
   {
-    defaultPrefix: '~',
-    filters: REDDIT_PERMS
+    defaultPrefix: command_prefix,
+    filters: MEMBER_PERMS
   }
 );
 
