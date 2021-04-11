@@ -1,4 +1,4 @@
-import { MEMBER_COUNT_CHANNEL } from '../../config/configs';
+import { MEMBER_COUNT_CHANNEL } from '../config/configs';
 
 export async function getLatency(cb: (...any: any[]) => Promise<any>) {
   const s = Date.now();

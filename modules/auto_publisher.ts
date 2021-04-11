@@ -3,7 +3,7 @@ import {
   NEWS_CHANNEL_2,
   NEWS_CHANNEL_3,
   NEWS_CHANNEL_4
-} from '../../config/configs';
+} from '../config/configs';
 
 discord.on('MESSAGE_CREATE', async (message) => {
   let channel_id = NEWS_CHANNEL_1;

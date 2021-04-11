@@ -1,4 +1,4 @@
-import { LOG_CHANNEL, PERMISSIONS } from '../../config/configs';
+import { LOG_CHANNEL, PERMISSIONS } from '../config/configs';
 
 export namespace RoleUtil {
   /**
