@@ -1,8 +1,8 @@
-import { command_prefix, MEMBER_PERMS } from '../../config/configs';
+import { command_prefix, MEMBER_PERMS, GUILD_ID } from '../../config/configs';
 
 var MSGID = '';
 var AUTHORID = '';
-var guildId = 'GUILD ID';
+var guildId = GUILD_ID;
 
 new discord.command.CommandGroup({
   defaultPrefix: command_prefix
@@ -57,7 +57,7 @@ discord.registerEventHandler('MESSAGE_REACTION_ADD', async (theReaction) => {
     await option1.setColor(0x3f888f);
     await option1.setTitle('Administration Commands');
     await option1.setDescription(
-      '`kick <user.mention>`: Kicks a specified user from the guild.\n`ban <user.mention> [reason]`: Ban a specified user from the guild for a specified reason.\n\nFields marked with the `<>` flags are required.\nFields marked with the `[]` flags are optional.\nDo not include the `<>` and/or `[]` flags in the command.'
+      '`kick <user.mention>`: Kicks a specified user from the guild.\n`ban <user.mention> [reason]`: Ban a specified user from the guild for a specified reason.\n`slowmode: <time> [channel.mention]`: Apply slowmode to a specified channel.\n\nFields marked with the `<>` flags are required.\nFields marked with the `[]` flags are optional.\nDo not include the `<>` and/or `[]` flags in the command.'
     );
     const theMsg2 = await theMsg.reply(option1);
     MSGID = '';
@@ -137,7 +137,7 @@ discord.registerEventHandler('MESSAGE_REACTION_ADD', async (theReaction) => {
     const option8 = new discord.Embed();
     await option8.setColor(0x3f888f);
     await option8.setTitle('**Canceled**');
-    await option8.setDescription(`You chanceled the command selection`);
+    await option8.setDescription(`You canceled the command selection`);
 
     const theMsg4 = await theMsg.reply(option8);
     MSGID = '';
