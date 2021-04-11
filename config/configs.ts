@@ -3,6 +3,7 @@ var f = discord.command.filters;
 
 // Base Config
 export const command_prefix = ' ';
+export const GUILD_ID = ' ';
 
 // Images
 export const PYLON_ICON =
