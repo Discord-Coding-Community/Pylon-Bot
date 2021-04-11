@@ -1,46 +1,166 @@
-const permissions = [
-  'CREATE_INSTANT_INVITE',
-  'KICK_MEMBERS',
-  'BAN_MEMBERS',
-  'ADMINISTRATOR',
-  'MANAGE_CHANNELS',
-  'MANAGE_GUILD',
-  'ADD_REACTIONS',
-  'VIEW_AUDIT_LOG',
-  'PRIORITY_SPEAKER',
-  'STREAM',
-  'VIEW_CHANNEL',
-  'SEND_MESSAGES',
-  'SEND_TTS_MESSAGES',
-  'MANAGE_MESSAGES',
-  'EMBED_LINKS',
-  'ATTACH_FILES',
-  'READ_MESSAGE_HISTORY',
-  'MENTION_EVERYONE',
-  'USE_EXTERNAL_EMOJIS',
-  'VIEW_GUILD_ANALYTICS',
-  'CONNECT',
-  'SPEAK',
-  'MUTE_MEMBERS',
-  'DEAFEN_MEMBERS',
-  'MOVE_MEMBERS',
-  'USE_VAD',
-  'CHANGE_NICKNAME',
-  'MANAGE_NICKNAMES',
-  'MANAGE_ROLES',
-  'MANAGE_WEBHOOKS',
-  'MANAGE_EMOJIS'
-];
+import { LOG_CHANNEL, PERMISSIONS } from '../../config/configs';
+
+export namespace RoleUtil {
+  /**
+   * Union type between Role and Snowflake
+   */
+  type roleFlake = discord.Role | discord.Snowflake;
+  /**
+   * Gets a user's highest role.
+   * @param {discord.GuildMember} user
+   */
+  export async function getHighest(user: discord.GuildMember) {
+    const guild = await discord.getGuild();
+    const roles = [];
+    for (const role of user.roles) roles.push(await guild.getRole(role));
+    return roles
+      .filter((e) => e !== null)
+      .sort((a, b) => b!.position - a!.position)[0];
+  }
+  /**
+   * Gets a user's hoist role (highest role that is hoisted)
+   * @param {discord.GuildMember} user
+   */
+  export async function getHoist(user: discord.GuildMember) {
+    const guild = await user.getGuild();
+    const roles = [];
+    for (const role of user.roles) roles.push(await guild.getRole(role));
+    return roles
+      .filter((e) => e !== null && e.hoist)
+      .sort((a, b) => b!.position - a!.position)
+      .reverse()[0];
+  }
+  /**
+   * Gets a user's member list color (highest role with a color)
+   * @param {discord.GuildMember} user
+   */
+  export async function getColor(user: discord.GuildMember) {
+    const guild = await user.getGuild();
+    const roles = [];
+    for (const role of user.roles) roles.push(await guild.getRole(role));
+    return roles
+      .filter((e) => e !== null && e.color)
+      .sort((a, b) => b!.position - a!.position)[0];
+  }
+  /**
+   * Sets a users roles.
+   * Note: This will remove all the users roles!
+   * @param {discord.GuildMember} user
+   * @param {roleFlake[]} roles
+   */
+  export async function set(user: discord.GuildMember, roles: roleFlake[]) {
+    const ids = roles.map((e) => (e instanceof discord.Role ? e.id : e));
+    await user.edit({
+      roles: ids
+    });
+  }
+  /**
+   * Adds roles to a user.
+   * @param {roleFlake[]} roles
+   */
+  export async function add(user: discord.GuildMember, roles: roleFlake[]) {
+    const ids = roles.map((e) => (e instanceof discord.Role ? e.id : e));
+    await user.edit({
+      roles: user.roles.concat(ids)
+    });
+  }
+  /**
+   * Removes roles from a user.
+   * @param {discord.GuildMember} user
+   * @param {roleFlake[]} roles
+   */
+  export async function remove(user: discord.GuildMember, roles: roleFlake[]) {
+    const ids = roles.map((e) => (e instanceof discord.Role ? e.id : e));
+    await user.edit({
+      roles: user.roles.filter((e) => !ids.includes(e))
+    });
+  }
+  /**
+   * Get a user's roles.
+   * @param {discord.GuildMember} user
+   */
+  export async function get(user: discord.GuildMember) {
+    const guild = await discord.getGuild();
+    const r = await Promise.all(user.roles.map((id) => guild.getRole(id)));
+    return r
+      .filter((e) => e !== null)
+      .sort((a, b) => b!.position - a!.position);
+  }
+  /**
+   * Removes **every** role from a user.
+   */
+  export async function clear(user: discord.GuildMember) {
+    await user.edit({
+      roles: []
+    });
+  }
+  /**
+   * Check if the user has any of the roles
+   * @param {discord.GuildMember} user
+   * @param {roleFlake[]} roles
+   */
+  export async function has(user: discord.GuildMember, roles: roleFlake[]) {
+    const ids = roles.map((e) => (e instanceof discord.Role ? e.id : e));
+    return ids.every((i) => user.roles.includes(i));
+  }
+  /**
+   * Check if the user does not have any of the roles
+   * @param {discord.GuildMember} user
+   * @param {roleFlake[]} roles
+   */
+  export async function doesNotHave(
+    user: discord.GuildMember,
+    roles: roleFlake[]
+  ) {
+    return !has(user, roles);
+  }
+  /**
+   * Returns an array of members that have this role.
+   * @param {roleFlake} role
+   */
+  export async function members(role: roleFlake) {
+    const id = role instanceof discord.Role ? role.id : role;
+    const mem = [];
+    const guild = await discord.getGuild();
+    for await (const e of guild.iterMembers()) {
+      if (e.roles.includes(id)) mem.push(e);
+    }
+    return mem;
+  }
+  /**
+   * Returns a collective array of members that have any of the roles
+   * @param {roleFlake[]} roles
+   */
+  export async function membersCollective(roles: roleFlake[]) {
+    const ids = roles.map((e) => (e instanceof discord.Role ? e.id : e));
+    const mem = [];
+    const guild = await discord.getGuild();
+    for (const r of ids) {
+      for await (const e of guild.iterMembers()) {
+        if (e.roles.includes(r)) mem.push(e);
+      }
+    }
+    return mem;
+  }
+  /**
+   * Returns the role for @everyone (same as the guild ID)
+   */
+  export async function everyone() {
+    return (await discord.getGuild()).id;
+  }
+}
 
 function bitfieldToArray(bitfield: number) {
-  return permissions.filter((_, i) => {
+  return PERMISSIONS.filter((_, i) => {
     const current = 1 << i;
     return (bitfield & current) === current;
   });
 }
+
 export function capitalizeWords(s: string) {
   return s.replace(/(^|[ ])./g, (e) => e.toUpperCase());
 }
+
 export function makePermissionDiff(
   newPermissions: number,
   oldPermissions: number
@@ -54,11 +174,10 @@ export function makePermissionDiff(
       .map((e) => `- ${capitalizeWords(e.toLowerCase().replace(/_/g, ' '))}`)
   };
 }
-const logging_channel_id = '818338601972006932';
 
 discord.on('GUILD_ROLE_UPDATE', async (event, old) => {
   const messages = [];
-  const ch = (await discord.getGuildTextChannel(logging_channel_id))!;
+  const ch = (await discord.getGuildTextChannel(LOG_CHANNEL))!;
   const timestamp = `\`[${new Date()
     .toLocaleTimeString()
     .replace(/[^\d:]/g, '')}]\``;
@@ -68,32 +187,24 @@ discord.on('GUILD_ROLE_UPDATE', async (event, old) => {
     const diff = makePermissionDiff(event.role.permissions, old.permissions);
 
     const diffBlock = `\`\`\`diff
-${diff.added.length ? diff.added.join('\n') : ''}${
-      diff.removed.length ? '\n' + diff.removed.join('\n') : ''
-    }󠁡
+${diff.added.length ? diff.added.join('\n') : ''}${diff.removed.length ? '\n' + diff.removed.join('\n') : ''
+      }󠁡
 \`\`\``;
     messages.push(
-      `${timestamp} ${
-        discord.decor.Emojis.GEAR
-      } (\`Guild Role Update\`) ${event.role.toMention()} ${formattedID} permissions edited: ${diffBlock}`
+      `${timestamp} ${discord.decor.Emojis.GEAR} (\`Guild Role Update\`) ${event.role.name} ${formattedID} permissions edited: ${diffBlock}`
     );
   }
 
   if (event.role.position !== old.position) {
     messages.push(
-      `${timestamp} ${
-        discord.decor.Emojis.GEAR
-      } (\`Guild Role Update\`) ${event.role.toMention()} ${formattedID} position was changed: \`${
-        old.position
-      }\` ${discord.decor.Emojis.ARROW_RIGHT} \`${event.role.position}\``
+      `${timestamp} ${discord.decor.Emojis.GEAR} (\`Guild Role Update\`) ${event.role.name} ${formattedID} position was changed: \`${old.position}\` ${discord.decor.Emojis.ARROW_RIGHT} \`${event.role.position}\``
     );
   }
 
   if (event.role.hoist !== old.hoist) {
     messages.push(
-      `${timestamp} ${
-        discord.decor.Emojis.GEAR
-      } (\`Guild Role Update\`) ${event.role.toMention()} ${formattedID} hoist state was changed to \`${capitalizeWords(
+      `${timestamp} ${discord.decor.Emojis.GEAR} (\`Guild Role Update\`) ${event.role.name
+      } ${formattedID} hoist state was changed to \`${capitalizeWords(
         `${event.role.hoist}`
       )}\``
     );
@@ -101,9 +212,8 @@ ${diff.added.length ? diff.added.join('\n') : ''}${
 
   if (event.role.mentionable !== old.mentionable) {
     messages.push(
-      `${timestamp} ${
-        discord.decor.Emojis.GEAR
-      } (\`Guild Role Update\`) ${event.role.toMention()} ${formattedID} mentionable state was changed to \`${capitalizeWords(
+      `${timestamp} ${discord.decor.Emojis.GEAR} (\`Guild Role Update\`) ${event.role.name
+      } ${formattedID} mentionable state was changed to \`${capitalizeWords(
         `${event.role.mentionable}`
       )}\``
     );
@@ -111,9 +221,8 @@ ${diff.added.length ? diff.added.join('\n') : ''}${
 
   if (event.role.managed !== old.managed) {
     messages.push(
-      `${timestamp} ${
-        discord.decor.Emojis.GEAR
-      } (\`Guild Role Update\`) ${event.role.toMention()} ${formattedID} managed role status was changed to \`${capitalizeWords(
+      `${timestamp} ${discord.decor.Emojis.GEAR} (\`Guild Role Update\`) ${event.role.name
+      } ${formattedID} managed role status was changed to \`${capitalizeWords(
         `${event.role.managed}`
       )}\``
     );
@@ -123,19 +232,13 @@ ${diff.added.length ? diff.added.join('\n') : ''}${
     const oldColor = old.color.toString(16);
     const newColor = event.role.color.toString(16);
     messages.push(
-      `${timestamp} ${
-        discord.decor.Emojis.GEAR
-      } (\`Guild Role Update\`) ${event.role.toMention()} ${formattedID} color was changed: \`#${oldColor}\` ➡️ \`${newColor}\``
+      `${timestamp} ${discord.decor.Emojis.GEAR} (\`Guild Role Update\`) ${event.role.name} ${formattedID} color was changed: \`#${oldColor}\` ➡️ \`${newColor}\``
     );
   }
 
   if (event.role.name !== old.name) {
     messages.push(
-      `${timestamp} ${
-        discord.decor.Emojis.GEAR
-      } (\`Guild Role Update\`) ${event.role.toMention()} ${formattedID} name was changed:  \n**•** __Before__: \`${
-        old.name
-      }\`\n**•** __After__:   \`${event.role.name}\``
+      `${timestamp} ${discord.decor.Emojis.GEAR} (\`Guild Role Update\`) ${event.role.name} ${formattedID} name was changed:  \n**•** __Before__: \`${old.name}\`\n**•** __After__:   \`${event.role.name}\``
     );
   }
   await ch.sendMessage(
@@ -162,22 +265,19 @@ discord.on(discord.Event.GUILD_UPDATE, async (current, old) => {
   const dmnKeys = ['All Messages', 'Only Mentions'];
   if (current.defaultMessageNotifications !== old.defaultMessageNotifications)
     messages.push(
-      `server default message notifications changed from **${
-        dmnKeys[old.defaultMessageNotifications]
+      `server default message notifications changed from **${dmnKeys[old.defaultMessageNotifications]
       }** to **${dmnKeys[current.defaultMessageNotifications]}**`
     );
   const nsfwLevelKeys = ['Disabled', 'Members Without Roles', 'All Members'];
   if (current.explicitContentFilter !== old.explicitContentFilter)
     messages.push(
-      `server explicit content filter changed from **${
-        nsfwLevelKeys[old.explicitContentFilter]
+      `server explicit content filter changed from **${nsfwLevelKeys[old.explicitContentFilter]
       }** to **${nsfwLevelKeys[current.explicitContentFilter]}**`
     );
   const verificationLevelKeys = ['None', 'Low', 'Medium', 'High', 'Very High'];
   if (current.verificationLevel !== old.verificationLevel)
     messages.push(
-      `server verification level changed from **${
-        verificationLevelKeys[old.verificationLevel]
+      `server verification level changed from **${verificationLevelKeys[old.verificationLevel]
       }** to **${verificationLevelKeys[current.verificationLevel]}**`
     );
 
@@ -188,8 +288,7 @@ discord.on(discord.Event.GUILD_UPDATE, async (current, old) => {
   const mfaLevelKeys = ['None', 'Elevated'];
   if (current.mfaLevel !== old.mfaLevel)
     messages.push(
-      `server 2fa requirement for moderation changed from **${
-        mfaLevelKeys[old.mfaLevel]
+      `server 2fa requirement for moderation changed from **${mfaLevelKeys[old.mfaLevel]
       }** to **${mfaLevelKeys[current.mfaLevel]}**`
     );
   if (current.ownerId !== old.ownerId)
@@ -256,7 +355,7 @@ ${diff.removed.join('\n')}
     messages.push(`server features changed: ${diffBlock}`);
   }
 
-  const ch = await discord.getGuildTextChannel(logging_channel_id);
+  const ch = await discord.getGuildTextChannel(LOG_CHANNEL);
   if (!ch) throw new Error('invalid logging channel id');
   const timestamp = `\`[${new Date()
     .toLocaleTimeString()
@@ -282,4 +381,126 @@ export function makeArrayDiff(current: any[], old: any[]) {
     added: current.filter((e) => !old.includes(e)).map((e) => `+ ${e}`),
     removed: old.filter((e) => !current.includes(e)).map((e) => `- ${e}`)
   };
+}
+
+discord.on('VOICE_STATE_UPDATE', async (voiceState, oldVoiceState) => {
+  const messages: string[] = [];
+
+  if (voiceState.member !== oldVoiceState.member) return;
+  if (voiceState.channelId !== oldVoiceState.channelId)
+    messages.push(
+      getVoiceChangeType(
+        voiceState.member.toMention(),
+        oldVoiceState.channelId
+          ? `\`${(await oldVoiceState.getChannel())!.name}\``
+          : undefined,
+        voiceState.channelId
+          ? `\`${(await voiceState.getChannel())!.name}\``
+          : undefined
+      )
+    );
+
+  if (voiceState.deaf !== oldVoiceState.deaf) {
+    if (voiceState.deaf && !oldVoiceState.deaf) {
+      messages.push(
+        `🔇 ${voiceState.member.toMention()} was server deafened in ${getVCDisplay(
+          (await voiceState.getChannel())!
+        )} **[**||\`${voiceState.channelId}\`||**]**`
+      );
+    }
+    if (!voiceState.deaf && oldVoiceState.deaf) {
+      messages.push(
+        `🔊 ${voiceState.member.toMention()} was server undeafened in ${getVCDisplay(
+          (await voiceState.getChannel())!
+        )} **[**||\`${voiceState.channelId}\`||**]**`
+      );
+    }
+  }
+
+  if (voiceState.mute !== oldVoiceState.mute) {
+    if (voiceState.mute && !oldVoiceState.mute) {
+      messages.push(
+        `🎤 ${voiceState.member.toMention()} was server muted in ${getVCDisplay(
+          (await voiceState.getChannel())!
+        )} **[**||\`${voiceState.channelId}\`||**]**`
+      );
+    }
+    if (!voiceState.mute && oldVoiceState.mute) {
+      messages.push(
+        `🎤 ${voiceState.member.toMention()} was server unmuted in ${getVCDisplay(
+          (await voiceState.getChannel())!
+        )} **[**||\`${voiceState.channelId}\`||**]**`
+      );
+    }
+  }
+
+  if (voiceState.selfDeaf !== oldVoiceState.selfDeaf) {
+    if (voiceState.selfDeaf && !oldVoiceState.selfDeaf) {
+      messages.push(
+        `🔇 ${voiceState.member.toMention()} deafened themselves in ${getVCDisplay(
+          (await voiceState.getChannel())!
+        )} **[**||\`${voiceState.channelId}\`||**]**`
+      );
+    }
+    if (!voiceState.selfDeaf && oldVoiceState.selfDeaf) {
+      messages.push(
+        `🔊 ${voiceState.member.toMention()} was undeafened themselves in ${getVCDisplay(
+          (await voiceState.getChannel())!
+        )} **[**||\`${voiceState.channelId}\`||**]**`
+      );
+    }
+  }
+
+  if (voiceState.selfMute !== oldVoiceState.selfMute) {
+    if (voiceState.selfMute && !oldVoiceState.selfMute) {
+      messages.push(
+        `🎤 ${voiceState.member.toMention()} muted themselves in ${getVCDisplay(
+          (await voiceState.getChannel())!
+        )} **[**||\`${voiceState.channelId}\`||**]**`
+      );
+    }
+    if (!voiceState.selfMute && oldVoiceState.selfMute) {
+      messages.push(
+        `🎤 ${voiceState.member.toMention()} was unmuted themselves in ${getVCDisplay(
+          (await voiceState.getChannel())!
+        )} **[**||\`${voiceState.channelId}\`||**]**`
+      );
+    }
+  }
+
+  if (voiceState.selfStream !== oldVoiceState.selfStream) {
+    if (voiceState.selfStream && !oldVoiceState.selfStream) {
+      messages.push(
+        `🖥️ ${voiceState.member.toMention()} started streaming in ${getVCDisplay(
+          (await voiceState.getChannel())!
+        )} **[**||\`${voiceState.channelId}\`||**]**`
+      );
+    }
+    if (!voiceState.selfStream && oldVoiceState.selfStream) {
+      messages.push(
+        `🖥️ ${voiceState.member.toMention()} stopped streaming in ${getVCDisplay(
+          (await voiceState.getChannel())!
+        )} **[**||\`${voiceState.channelId}\`||**]**`
+      );
+    }
+  }
+
+  const ch = await discord.getGuildTextChannel(LOG_CHANNEL);
+  if (!ch) throw new Error('invalid logging channel id');
+  const timestamp = `\`[${new Date()
+    .toLocaleTimeString()
+    .replace(/[^\d:]/g, '')}]\``;
+  ch.sendMessage(
+    messages.map((e) => `${timestamp} (\`Voice State Update\`) ${e}`).join('\n')
+  );
+});
+function getVoiceChangeType(itemName: string, oldVal: any, newVal: any) {
+  if (!oldVal && newVal) return `${itemName} joined ${newVal}`;
+  if (oldVal && !newVal) return `${itemName} left ${oldVal}`;
+  if (oldVal && newVal) return `${itemName} moved from ${oldVal} to ${newVal}`;
+  return `${itemName} was not changed`;
+}
+async function getVCDisplay(c: discord.GuildChannel) {
+  return `${c.parentId ? `\`${(await c.getParent())!.name}\`**>**` : ''}\`${c.name
+    }\``;
 }

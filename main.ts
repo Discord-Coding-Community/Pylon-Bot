@@ -1,38 +1,27 @@
-import './modules/functions';
+// Modules
 import './modules/logger';
+import './modules/auto_publisher';
 
+// Events
 import './events/message';
-import './events/publish';
 
-import './commands/administration/kick';
-import './commands/administration/banlist';
+// Administration Commands
 import './commands/administration/ban';
+import './commands/administration/banlist';
+import './commands/administration/kick';
+import './commands/administration/slowmode';
 import './commands/administration/warn';
 
-import './commands/moderation/mutes';
+// Moderation Commands
 import './commands/moderation/announce';
+import './commands/moderation/mutes';
 
+// Social Commands
 import './commands/social/twitter';
 import './commands/social/reddit';
 
-import './commands/utility/search';
-import './commands/utility/ping';
-import './commands/utility/info';
-import './commands/utility/menu';
-
-import './ezmoney/commands/admin';
-import './ezmoney/commands/master';
-import './ezmoney/commands/profile';
-
-import './ezmoney/config/levelling';
-
-import './ezmoney/currency/gamble';
-import './ezmoney/currency/search';
-import './ezmoney/currency/timed-tasks';
-
-import './ezmoney/inventory/inv-setup';
-import './ezmoney/inventory/inventory';
-import './ezmoney/inventory/shop';
-
-import './ezmoney/steal/steal-func';
-import './ezmoney/steal/steal';
+// Utility Commands
+import './commands/utility/info'
+import './commands/utility/menu'
+import './commands/utility/ping'
+import './commands/utility/search'

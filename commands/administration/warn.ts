@@ -1,15 +1,17 @@
-const adminRoles: string[] = [' '];
-const warnRole: string = ' ';
-const removeRole: string = ' ';
-const adminLogChannel: string = ' ';
-
+import {
+  LOG_CHANNEL,
+  ADMIN_ROLE,
+  MUTE_ROLE,
+  MEMBER_ROLE,
+  command_prefix
+} from '../../config/configs';
 const WarnCommands: discord.command.CommandGroup = new discord.command.CommandGroup(
   {
-    defaultPrefix: '~'
+    defaultPrefix: command_prefix
   }
 );
 
-import * as Database from './db/database';
+import * as Database from '../../modules/db/database';
 
 interface structure {
   index: string;
@@ -21,7 +23,8 @@ interface structure {
 WarnCommands.on(
   {
     name: 'warn',
-    description: 'warn a user'
+    description:
+      'Warn a user for a specified reason.\n\n**Format**: [prefix]warn [user] [reason]\n**Examples**: ~warn @user#1234 spam'
   },
   (_arguments) => ({
     member: _arguments.guildMember(),
@@ -29,12 +32,12 @@ WarnCommands.on(
   }),
   async (message, { member, reason }) => {
     console.log('exect');
-    if (!message.member.roles.some((r) => adminRoles.includes(r))) {
+    if (!message.member.roles.some((r) => ADMIN_ROLE.includes(r))) {
       await message.reply('You are not permitted to use this command.');
       return;
     }
 
-    if (member.roles.some((r) => adminRoles.includes(r))) {
+    if (member.roles.some((r) => ADMIN_ROLE.includes(r))) {
       await message.reply("You can't warn a teammember.");
       return;
     }
@@ -45,8 +48,8 @@ WarnCommands.on(
     }
 
     try {
-      await member.removeRole(removeRole);
-      await member.addRole(warnRole);
+      await member.removeRole(MEMBER_ROLE);
+      await member.addRole(MUTE_ROLE);
     } catch (_) {}
 
     await message.reply(
@@ -54,7 +57,7 @@ WarnCommands.on(
     );
 
     discord
-      .getGuildTextChannel(adminLogChannel)
+      .getGuildTextChannel(LOG_CHANNEL)
       .then((channel) =>
         channel?.sendMessage(
           `User ${member.toMention()} was warned by ${message.member.toMention()} with the reason: "${reason}".`
@@ -99,7 +102,7 @@ WarnCommands.on(
     user: _arguments.guildMember()
   }),
   async (message, { user }) => {
-    if (!message.member.roles.some((r) => adminRoles.includes(r))) {
+    if (!message.member.roles.some((r) => ADMIN_ROLE.includes(r))) {
       await message.reply('You are not permitted to use this command.');
       return;
     }
@@ -137,7 +140,7 @@ WarnCommands.on(
     user: _arguments.guildMember()
   }),
   async (message, { user }) => {
-    if (!message.member.roles.some((r) => adminRoles.includes(r))) {
+    if (!message.member.roles.some((r) => ADMIN_ROLE.includes(r))) {
       await message.reply('You are not permitted to use this command.');
       return;
     }

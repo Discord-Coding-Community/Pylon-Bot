@@ -1,12 +1,9 @@
-const LOGGING_CHANNEL = ' ';
-const TITLE = '**__User Kicked__**';
-let f = discord.command.filters;
-const KICK_PERMS = f.and(f.canKickMembers());
+import { command_prefix, ADMIN_PERMS, LOG_CHANNEL } from '../../config/configs';
 
 const KickCommand: discord.command.CommandGroup = new discord.command.CommandGroup(
   {
-    defaultPrefix: '~',
-    filters: KICK_PERMS
+    defaultPrefix: command_prefix,
+    filters: ADMIN_PERMS
   }
 );
 
@@ -21,15 +18,18 @@ KickCommand.on(
   }),
   async (message, { member }) => {
     const guild = await discord.getGuild();
-    const channel = await discord.getGuildTextChannel(LOGGING_CHANNEL);
+    const channel = await discord.getGuildTextChannel(LOG_CHANNEL);
 
     const logger = new discord.Embed();
-    logger.setTitle(TITLE);
-    logger.setColor(0x00ff00);
-    logger.setFooter({
-      text: guild.name
+    logger.setTitle('**__USER KICKED__**');
+    logger.setColor(0x00ff00),
+      logger.setFooter({
+        text: guild.name,
+        iconUrl: `${guild.getIconUrl(discord.ImageType.PNG)}`
+      });
+    logger.setThumbnail({
+      url: member.user.getAvatarUrl(discord.ImageType.PNG)
     });
-    logger.setThumbnail({ url: member.user.getAvatarUrl() });
     logger.addField({
       name: 'User Name',
       value: `${member.user.username}`,

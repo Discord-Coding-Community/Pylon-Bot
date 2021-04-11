@@ -1,19 +1,17 @@
-const LOGGING_CHANNEL = ' ';
-const TITLE = '**__User Banned__**';
-let f = discord.command.filters;
-const BAN_PERMS = f.and(f.canBanMembers());
+import { command_prefix, LOG_CHANNEL, ADMIN_PERMS } from '../../config/configs';
 
 const BanCommand: discord.command.CommandGroup = new discord.command.CommandGroup(
   {
-    defaultPrefix: '~',
-    filters: BAN_PERMS
+    defaultPrefix: command_prefix,
+    filters: ADMIN_PERMS
   }
 );
 
 BanCommand.on(
   {
     name: 'ban',
-    aliases: ['b']
+    aliases: ['b', 'user-ban', 'banuser', 'banmember', 'ban-member'],
+    description: 'Ban a specified user from the guild for a specified reason.'
   },
   (args) => ({
     user: args.user(),
@@ -21,7 +19,7 @@ BanCommand.on(
   }),
   async (message, { user, reason }) => {
     const guild = await discord.getGuild();
-    const channel = await discord.getGuildTextChannel(LOGGING_CHANNEL);
+    const channel = await discord.getGuildTextChannel(LOG_CHANNEL);
 
     await guild.createBan(user, {
       deleteMessageDays: 7,
@@ -29,12 +27,13 @@ BanCommand.on(
     });
 
     const logger = new discord.Embed();
-    logger.setTitle(TITLE);
+    logger.setTitle('**__User Banned__**');
     logger.setColor(0x00ff00);
     logger.setFooter({
-      text: guild.name
+      text: guild.name,
+      iconUrl: `${guild.getIconUrl(discord.ImageType.PNG)}`
     });
-    logger.setThumbnail({ url: user.getAvatarUrl() });
+    logger.setThumbnail({ url: user.getAvatarUrl(discord.ImageType.PNG) });
     logger.addField({
       name: 'User Name',
       value: `${user.username}`,
