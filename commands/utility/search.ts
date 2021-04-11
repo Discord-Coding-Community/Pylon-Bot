@@ -1,9 +1,13 @@
-const API_KEY = ' ';
-let f = discord.command.filters;
+import {
+  command_prefix,
+  MEMBER_PERMS,
+  WOLFRAM_API
+} from '../../config/configs';
 
 const QuerySlashCommand = discord.interactions.commands;
 const QueryCommand = new discord.command.CommandGroup({
-  defaultPrefix: 'p.'
+  defaultPrefix: command_prefix,
+  filters: MEMBER_PERMS
 });
 
 QuerySlashCommand.register(
@@ -20,7 +24,7 @@ QuerySlashCommand.register(
   async (interaction, { query }) => {
     const s = Date.now();
     const api = await fetch(
-      `http://api.wolframalpha.com/v1/result?appid=${API_KEY}&i=${encodeURIComponent(
+      `http://api.wolframalpha.com/v1/result?appid=${WOLFRAM_API}&i=${encodeURIComponent(
         query
       )}`
     );
@@ -43,7 +47,7 @@ QueryCommand.on(
     query: args.text()
   }),
   async (message, { query }) => {
-    const appId = API_KEY;
+    const appId = WOLFRAM_API;
 
     let api = await fetch(
       `http://api.wolframalpha.com/v1/result?appid=${appId}&i=${query}`

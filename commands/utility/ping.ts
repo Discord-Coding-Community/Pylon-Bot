@@ -1,13 +1,15 @@
-let f = discord.command.filters;
-const PING_PERMS = f.and(f.canSendMessages());
+import {
+  command_prefix,
+  MEMBER_PERMS,
+  PING_THUMBNAIL
+} from '../../config/configs';
 
 const PingCommand: discord.command.CommandGroup = new discord.command.CommandGroup(
   {
-    defaultPrefix: '~',
-    filters: PING_PERMS
+    defaultPrefix: command_prefix,
+    filters: MEMBER_PERMS
   }
 );
-
 PingCommand.raw(
   {
     name: 'ping',
@@ -21,7 +23,7 @@ PingCommand.raw(
     embed.setTitle(`**__PING__**`);
     embed.setDescription(`The ping is ${latency}ms`);
     embed.setThumbnail({
-      url: 'https://emoji.gg/assets/emoji/8299_Loading.gif'
+      url: PING_THUMBNAIL
     });
     embed.setColor(0xf600ff);
     embed.setTimestamp(new Date().toISOString());

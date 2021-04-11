@@ -1,10 +1,9 @@
-let f = discord.command.filters;
-const INFO_PERMS = f.and(f.canSendMessages());
+import { command_prefix, MEMBER_PERMS } from '../../config/configs';
 
 const InfoCommands: discord.command.CommandGroup = new discord.command.CommandGroup(
   {
-    defaultPrefix: '~',
-    filters: INFO_PERMS
+    defaultPrefix: command_prefix,
+    filters: MEMBER_PERMS
   }
 );
 
@@ -97,7 +96,7 @@ InfoCommands.raw(
 
     let preferredLocale =
       typeof guild.preferredLocale === 'string' &&
-      guild.features.includes(discord.Guild.Feature.DISCOVERABLE)
+        guild.features.includes(discord.Guild.Feature.DISCOVERABLE)
         ? `\n  󠇰**Preferred Locale**: \`${guild.preferredLocale}\`\n`
         : '';
     let boosts =
@@ -127,8 +126,8 @@ InfoCommands.raw(
     let widget =
       guild.widgetEnabled === true
         ? '\n  󠇰**Widget**: ' +
-          discord.decor.Emojis.WHITE_CHECK_MARK +
-          ` ( ${widgetChannel} )`
+        discord.decor.Emojis.WHITE_CHECK_MARK +
+        ` ( ${widgetChannel} )`
         : '';
     let features =
       guild.features.length > 0 ? guild.features.join(', ') : 'None';
@@ -150,7 +149,7 @@ InfoCommands.raw(
       store: 0
     };
     let channels = await guild.getChannels();
-    channels.forEach(function(ch) {
+    channels.forEach(function (ch) {
       if (ch.type === discord.GuildChannel.Type.GUILD_TEXT) counts.text++;
       if (ch.type === discord.GuildChannel.Type.GUILD_VOICE) counts.voice++;
       if (ch.type === discord.GuildChannel.Type.GUILD_STORE) counts.store++;
@@ -170,13 +169,13 @@ InfoCommands.raw(
       if (obj > 0)
         chanStats.push(
           '\n ' +
-            emj +
-            '**' +
-            k.substr(0, 1).toUpperCase() +
-            k.substr(1) +
-            '**: **' +
-            obj +
-            '**'
+          emj +
+          '**' +
+          k.substr(0, 1).toUpperCase() +
+          k.substr(1) +
+          '**: **' +
+          obj +
+          '**'
         );
     }
     desc += '\n\n**❯ **Channels ⎯ ' + channels.length + chanStats.join('');
@@ -340,15 +339,13 @@ InfoCommands.on(
             emjMention =
               pres.emoji.id === null
                 ? pres.emoji.name
-                : `<${pres.emoji.animated === true ? 'a' : ''}:${
-                    pres.emoji.name
-                  }:${pres.emoji.id}>`;
+                : `<${pres.emoji.animated === true ? 'a' : ''}:${pres.emoji.name
+                }:${pres.emoji.id}>`;
           } else {
             emjMention = discord.decor.Emojis.NOTEPAD_SPIRAL;
           }
-          return `${emjMention}${
-            pres.state !== null ? ` \`${pres.state}\`` : ''
-          } (Custom Status)`;
+          return `${emjMention}${pres.state !== null ? ` \`${pres.state}\`` : ''
+            } (Custom Status)`;
         }
 
         return `${emj}${pres.name.length > 0 ? ` \`${pres.name}\`` : ''}`;

@@ -1,24 +1,17 @@
-let f = discord.command.filters;
-const PERMISSIONS = f.and(
-  f.canSendMessages(),
-  f.canEmbedLinks(),
-  f.canUseExternalEmojis(),
-  f.canUseVoiceActivity()
-);
-const prefix = 'p.';
+import { command_prefix, MEMBER_PERMS } from '../../config/configs';
 
 var MSGID = '';
 var AUTHORID = '';
 var guildId = 'GUILD ID';
 
 new discord.command.CommandGroup({
-  defaultPrefix: prefix
+  defaultPrefix: command_prefix
 }).raw(
   {
     name: 'menu',
     aliases: ['help', 'h', 'Menu', 'Help', 'H'],
     description: 'Displays the Pylon Menu',
-    filters: PERMISSIONS
+    filters: MEMBER_PERMS
   },
   async (msg) => {
     const menu = new discord.Embed();

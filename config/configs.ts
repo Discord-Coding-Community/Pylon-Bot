@@ -2,7 +2,7 @@
 var f = discord.command.filters;
 
 // Base Config
-export const command_prefix = '~';
+export const command_prefix = ' ';
 
 // Images
 export const PYLON_ICON =
@@ -11,8 +11,9 @@ export const TWITTER_ICON = 'https://cdn2.iconfinder.com/data/icons/minimalism/5
 
 
 // API
-export const TWITTER_API = '';
-export const TWITTER_BEARER = '';
+export const WOLFRAM_API = ' ';
+export const TWITTER_API = ' ';
+export const TWITTER_BEARER = ' ';
 
 // Channel IDs
 export const LOG_CHANNEL = ' ';
