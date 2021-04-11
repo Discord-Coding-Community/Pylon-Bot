@@ -7,6 +7,12 @@ export const command_prefix = '~';
 // Images
 export const PYLON_ICON =
   'https://cdn.discordapp.com/icons/558032771558408246/4a00504cd8e382e703d4d88ec209044a.png';
+export const TWITTER_ICON = 'https://cdn2.iconfinder.com/data/icons/minimalism/512/twitter.png';
+
+
+// API
+export const TWITTER_API = '';
+export const TWITTER_BEARER = '';
 
 // Channel IDs
 export const LOG_CHANNEL = ' ';

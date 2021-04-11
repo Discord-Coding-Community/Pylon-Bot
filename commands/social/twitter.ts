@@ -1,14 +1,16 @@
-const ADMIN_ROLE_ID = ' ';
-const TWITTER_API = ' ';
-const TWITTER_BEARER =
-  ' ';
-const TWITTER_ICON =
-  'https://cdn2.iconfinder.com/data/icons/minimalism/512/twitter.png';
+import {
+  command_prefix,
+  ADMIN_ROLE,
+  TWITTER_API,
+  TWITTER_BEARER,
+  TWITTER_ICON
+} from '../../config/configs';
+
 const TwitterSubCfg = {
   TWITTER_API_KEY: TWITTER_API,
   TWITTER_BEARER_TOKEN: TWITTER_BEARER,
   ICON_URL: TWITTER_ICON,
-  REQUIRED_ROLE_ID: ADMIN_ROLE_ID
+  REQUIRED_ROLE_ID: ADMIN_ROLE
 };
 
 class TwitterClient {
@@ -64,7 +66,7 @@ class TwitterClient {
 }
 
 const cmd = new discord.command.CommandGroup({
-  defaultPrefix: '~',
+  defaultPrefix: command_prefix,
   filters:
     TwitterSubCfg.REQUIRED_ROLE_ID?.length > 0
       ? discord.command.filters.hasRole(TwitterSubCfg.REQUIRED_ROLE_ID)
@@ -111,7 +113,7 @@ cmd.subcommand('twitter', (subcmd) => {
         await msg.reply(
           createEmbedMessage(
             `:x: There is a subscription already to this feed in ${subChannel?.toMention() ??
-              '*Unknown channel*'}`
+            '*Unknown channel*'}`
           )
         );
         return;
@@ -134,8 +136,7 @@ cmd.subcommand('twitter', (subcmd) => {
       let twitterNames = await TwitterClient.getUserNames([userId]);
       await msg.reply(
         createEmbedMessage(
-          `:white_check_mark: Successfully subscribed to [@${
-            twitterNames[0]
+          `:white_check_mark: Successfully subscribed to [@${twitterNames[0]
           }](https://twitter.com/${twitterNames[0]}) in ${ch.toMention()}`
         )
       );
