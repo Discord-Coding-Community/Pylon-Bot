@@ -1,7 +1,7 @@
 [![Release Date](https://img.shields.io/github/release-date/New-Horizon-Network/Pylon-Bot)](https://github.com/New-Horizon-Network/Pylon-Bot/releases)
 [![Commits](https://img.shields.io/github/last-commit/New-Horizon-Network/Pylon-Bot/main)](https://github.com/New-Horizon-Network/Pylon-Bot)
 [![Code Size](https://img.shields.io/github/languages/code-size/New-Horizon-Network/Pylon-Bot)](https://github.com/New-Horizon-Network/Pylon-Bot)
-[![Discord Coding Community](https://discordapp.com/api/guilds/801125364218200074/widget.png?style=shield)](https://dsc.gg/discord-coding-community)
+[![Pylon.bot](https://discordapp.com/api/guilds/530557949098065930/widget.png?style=shield)](https://discord.gg/hC6Bbtj)
 
 # Pylon.bot
 DCC Pylon App for use with [Pylon.bot](https://Pylon.bot)
