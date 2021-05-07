@@ -16,13 +16,13 @@ This repo was created for use with storing and sharing code to use with [Pylon.b
 
 ## Credits
 
- - [Sickae](https://github.com/Sickae/)
+ - [Sipos Bence ](https://github.com/Sickae/)
     - [Pylon Twitter Sub](https://github.com/Sickae/pylon-twitter-sub)
- - [kai-low256](https://github.com/kai-low256/)
+ - [Nate](https://github.com/kai-low256/)
     - [Pylon Reddit](https://discord.com/channels/530557949098065930/695065184615792710/797328463961915394)
  - [liamhtml](https://github.com/liamhtml)
     - [Pylon Siri](https://discord.com/channels/530557949098065930/695065184615792710/813451541616001075)
- - [FlorianStrobl](https://github.com/FlorianStrobl)
+ - [Florian Crafterl](https://github.com/FlorianStrobl)
      - [Warn Command Database](https://github.com/FlorianStrobl/Discord-Pylon-Bot/blob/master/Scripts/Functions/WarnCommandWDatabase.ts)
      - [Pylon TimeToStringMS](https://github.com/FlorianStrobl/Discord-Pylon-Bot/blob/master/Scripts/Functions/TimeStringToMS.ts)
      - [Pylon BetterKV](https://github.com/FlorianStrobl/Discord-Pylon-Bot/blob/master/Scripts/BetterKV/betterKV.ts)
