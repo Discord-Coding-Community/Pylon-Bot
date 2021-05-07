@@ -25,3 +25,7 @@ This repo was created for use with storing and sharing code to use with [Pylon.b
      - [Warn Command Database](https://github.com/FlorianStrobl/Discord-Pylon-Bot/blob/master/Scripts/Functions/WarnCommandWDatabase.ts)
      - [TimeToStringMS](https://github.com/FlorianStrobl/Discord-Pylon-Bot/blob/master/Scripts/Functions/TimeStringToMS.ts)
      - [BetterKV](https://github.com/FlorianStrobl/Discord-Pylon-Bot/blob/master/Scripts/BetterKV/betterKV.ts)
+
+### Support
+
+ - **Discord**: [Pylon.bot](https://discord.gg/hC6Bbtj)
