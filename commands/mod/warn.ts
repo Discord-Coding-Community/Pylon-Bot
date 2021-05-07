@@ -2,7 +2,7 @@ import {
   LOG_CHANNEL,
   MOD_ROLE,
   MUTE_ROLE,
-  USER_ROLE,
+  USER_PERMS,
   COMMAND_PREFIX
 } from '../../config/configs';
 const WarnCommands: discord.command.CommandGroup = new discord.command.CommandGroup(
@@ -48,7 +48,7 @@ WarnCommands.on(
     }
 
     try {
-      await member.removeRole(USER_ROLE);
+      await member.removeRole(USER_PERMS);
       await member.addRole(MUTE_ROLE);
     } catch (_) {}
 

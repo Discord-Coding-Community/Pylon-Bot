@@ -24,6 +24,7 @@ new discord.command.CommandGroup({
 3️⃣: Social Commands
 4️⃣: Utility Commands
 5️⃣: Slash Commands
+6️⃣: Economy Commands
 `
     );
 
@@ -34,6 +35,7 @@ new discord.command.CommandGroup({
     await thehelpmsg.addReaction('3️⃣');
     await thehelpmsg.addReaction('4️⃣');
     await thehelpmsg.addReaction('5️⃣');
+    await thehelpmsg.addReaction('6️⃣');
     await thehelpmsg.addReaction('❌');
 
     MSGID = thehelpmsg.id;
@@ -73,7 +75,7 @@ discord.registerEventHandler('MESSAGE_REACTION_ADD', async (theReaction) => {
     await option2.setColor(0x3f888f);
     await option2.setTitle('Moderation Commands');
     await option2.setDescription(
-      '`announce <message>`: Send an announcement to the guild announcements channel.\n`mute <user.mention>`: Mute a specified user.\n`unmute <user.mention`: Un Mute a specified user.\n`tempmute <user> <time>`: Mute a specified user for a specified amount of time.\n\nFields marked with the `<>` flags are required.\nFileds marked with the `[]` flags are optional.\nDo not include the `<>` and/or `[]` flags in the command.'
+      '`announce <message>`: Send an announcement to the guild announcements channel.\n`mute <user.mention>`: Mute a specified user.\n`unmute <user.mention`: Un Mute a specified user.\n`tempmute <user> <time>`: Mute a specified user for a specified amount of time.\n`warn <user> <reason>`: Warn a user for s specified reason.\n\nFields marked with the `<>` flags are required.\nFileds marked with the `[]` flags are optional.\nDo not include the `<>` and/or `[]` flags in the command.'
     );
     const theMsg3 = await theMsg.reply(option2);
     MSGID = '';
@@ -123,6 +125,22 @@ discord.registerEventHandler('MESSAGE_REACTION_ADD', async (theReaction) => {
     await option2.setTitle('Slash Commands');
     await option2.setDescription(
       "`search <query>`: Perform a search using the Wolframn API.\n\nFeilds marked with the `<>` flags are required.\nFileds marked with the `[]` flags are optional.\nDo not include the `<>` and/or `[]` flags in the command.'"
+    );
+    const theMsg3 = await theMsg.reply(option2);
+    MSGID = '';
+    AUTHORID = '';
+    await theMsg.delete();
+  }
+  if (
+    theReaction.emoji.name == '6️⃣' &&
+    theReaction.messageId == MSGID &&
+    theReaction.member.user.id == AUTHORID
+  ) {
+    const option2 = new discord.Embed();
+    await option2.setColor(0x3f888f);
+    await option2.setTitle('Economy Commands');
+    await option2.setDescription(
+      "`rank`: Display\'s the user\'s Rank card.\n`Top`: Display\'s the guild's XP leaderboard.\n\nFeilds marked with the `<>` flags are required.\nFileds marked with the `[]` flags are optional.\nDo not include the `<>` and/or `[]` flags in the command.'"
     );
     const theMsg3 = await theMsg.reply(option2);
     MSGID = '';
