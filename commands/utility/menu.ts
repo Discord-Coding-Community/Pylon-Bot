@@ -57,7 +57,7 @@ discord.registerEventHandler('MESSAGE_REACTION_ADD', async (theReaction) => {
   ) {
     const option1 = new discord.Embed();
     await option1.setColor(0x3f888f);
-    await option1.setTitle('Administration Commands');
+    await option1.setTitle('Admin Commands');
     await option1.setDescription(
       '`kick <user.mention>`: Kicks a specified user from the guild.\n`ban <user.mention> [reason]`: Ban a specified user from the guild for a specified reason.\n`slowmode: <time> [channel.mention]`: Apply slowmode to a specified channel.\n\nFields marked with the `<>` flags are required.\nFields marked with the `[]` flags are optional.\nDo not include the `<>` and/or `[]` flags in the command.'
     );
@@ -73,7 +73,7 @@ discord.registerEventHandler('MESSAGE_REACTION_ADD', async (theReaction) => {
   ) {
     const option2 = new discord.Embed();
     await option2.setColor(0x3f888f);
-    await option2.setTitle('Moderation Commands');
+    await option2.setTitle('Mod Commands');
     await option2.setDescription(
       '`announce <message>`: Send an announcement to the guild announcements channel.\n`mute <user.mention>`: Mute a specified user.\n`unmute <user.mention`: Un Mute a specified user.\n`tempmute <user> <time>`: Mute a specified user for a specified amount of time.\n`warn <user> <reason>`: Warn a user for s specified reason.\n\nFields marked with the `<>` flags are required.\nFileds marked with the `[]` flags are optional.\nDo not include the `<>` and/or `[]` flags in the command.'
     );
@@ -105,7 +105,7 @@ discord.registerEventHandler('MESSAGE_REACTION_ADD', async (theReaction) => {
   ) {
     const option3 = new discord.Embed();
     await option3.setColor(0x3f888f);
-    await option3.setTitle('Utility Commands');
+    await option3.setTitle('Util Commands');
     await option3.setDescription(
       "`search <input>`: Search for something using the worlfram api.\nPing`: Responds with the bot's ping.\n`info [user.mention]`: Displays a user's info.\n`Menu`: Displays the Pylon help menu.\n\nFields marked with the `<>` flags are required.\nFileds marked with the `[]` flags are optional.\nDo not include the `<>` and/or `[]` flags in the command."
     );
