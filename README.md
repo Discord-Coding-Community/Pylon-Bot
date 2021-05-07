@@ -17,12 +17,12 @@ This repo was created for use with storing and sharing code to use with [Pylon.b
 ## Credits
 
  - [Sipos Bence ](https://github.com/Sickae/)
-    - [Pylon Twitter Sub](https://github.com/Sickae/pylon-twitter-sub)
+    - [Twitter Sub](https://github.com/Sickae/pylon-twitter-sub)
  - [Nate](https://github.com/kai-low256/)
-    - [Pylon Reddit](https://discord.com/channels/530557949098065930/695065184615792710/797328463961915394)
+    - [Reddit](https://discord.com/channels/530557949098065930/695065184615792710/797328463961915394)
  - [liamhtml](https://github.com/liamhtml)
-    - [Pylon Siri](https://discord.com/channels/530557949098065930/695065184615792710/813451541616001075)
+    - [Siri](https://discord.com/channels/530557949098065930/695065184615792710/813451541616001075)
  - [Florian Crafter](https://github.com/FlorianStrobl)
      - [Warn Command Database](https://github.com/FlorianStrobl/Discord-Pylon-Bot/blob/master/Scripts/Functions/WarnCommandWDatabase.ts)
-     - [Pylon TimeToStringMS](https://github.com/FlorianStrobl/Discord-Pylon-Bot/blob/master/Scripts/Functions/TimeStringToMS.ts)
-     - [Pylon BetterKV](https://github.com/FlorianStrobl/Discord-Pylon-Bot/blob/master/Scripts/BetterKV/betterKV.ts)
+     - [TimeToStringMS](https://github.com/FlorianStrobl/Discord-Pylon-Bot/blob/master/Scripts/Functions/TimeStringToMS.ts)
+     - [BetterKV](https://github.com/FlorianStrobl/Discord-Pylon-Bot/blob/master/Scripts/BetterKV/betterKV.ts)
