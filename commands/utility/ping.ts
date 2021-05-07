@@ -1,12 +1,12 @@
 import {
-  command_prefix,
+  COMMAND_PREFIX,
   MEMBER_PERMS,
   PING_THUMBNAIL
 } from '../../config/configs';
 
 const PingCommand: discord.command.CommandGroup = new discord.command.CommandGroup(
   {
-    defaultPrefix: command_prefix,
+    defaultPrefix: COMMAND_PREFIX,
     filters: MEMBER_PERMS
   }
 );

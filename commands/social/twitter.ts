@@ -1,5 +1,5 @@
 import {
-  command_prefix,
+  COMMAND_PREFIX,
   ADMIN_ROLE,
   TWITTER_API,
   TWITTER_BEARER,
@@ -66,7 +66,7 @@ class TwitterClient {
 }
 
 const cmd = new discord.command.CommandGroup({
-  defaultPrefix: command_prefix,
+  defaultPrefix: COMMAND_PREFIX,
   filters:
     TwitterSubCfg.REQUIRED_ROLE_ID?.length > 0
       ? discord.command.filters.hasRole(TwitterSubCfg.REQUIRED_ROLE_ID)

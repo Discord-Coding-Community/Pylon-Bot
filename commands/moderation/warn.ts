@@ -1,17 +1,17 @@
 import {
   LOG_CHANNEL,
-  ADMIN_ROLE,
+  MOD_ROLE,
   MUTE_ROLE,
-  MEMBER_ROLE,
-  command_prefix
+  USER_ROLE,
+  COMMAND_PREFIX
 } from '../../config/configs';
 const WarnCommands: discord.command.CommandGroup = new discord.command.CommandGroup(
   {
-    defaultPrefix: command_prefix
+    defaultPrefix: COMMAND_PREFIX
   }
 );
 
-import * as Database from '../../modules/db/database';
+import * as betterKV from '../../modules/db/betterKV';
 
 interface structure {
   index: string;
@@ -32,12 +32,12 @@ WarnCommands.on(
   }),
   async (message, { member, reason }) => {
     console.log('exect');
-    if (!message.member.roles.some((r) => ADMIN_ROLE.includes(r))) {
+    if (!message.member.roles.some((r) => MOD_ROLE.includes(r))) {
       await message.reply('You are not permitted to use this command.');
       return;
     }
 
-    if (member.roles.some((r) => ADMIN_ROLE.includes(r))) {
+    if (member.roles.some((r) => MOD_ROLE.includes(r))) {
       await message.reply("You can't warn a teammember.");
       return;
     }
@@ -48,7 +48,7 @@ WarnCommands.on(
     }
 
     try {
-      await member.removeRole(MEMBER_ROLE);
+      await member.removeRole(USER_ROLE);
       await member.addRole(MUTE_ROLE);
     } catch (_) {}
 
@@ -64,12 +64,12 @@ WarnCommands.on(
         )
       );
 
-    const oldData = await Database.GetData(
+    const oldData = await betterKV.GetData(
       `warncase-${member.user.id}`,
       'warncases'
     );
     if (oldData === undefined)
-      await Database.SaveData(
+      await betterKV.SaveData(
         {
           index: `warncase-${member.user.id}`,
           reason: [reason],
@@ -79,7 +79,7 @@ WarnCommands.on(
         'warncases'
       );
     else
-      await Database.UpdateDataValues(
+      await betterKV.UpdateDataValues(
         `warncase-${member.user.id}`,
 
         (data: structure) => {
@@ -102,12 +102,12 @@ WarnCommands.on(
     user: _arguments.guildMember()
   }),
   async (message, { user }) => {
-    if (!message.member.roles.some((r) => ADMIN_ROLE.includes(r))) {
+    if (!message.member.roles.some((r) => MOD_ROLE.includes(r))) {
       await message.reply('You are not permitted to use this command.');
       return;
     }
 
-    const infos: undefined | structure = await Database.GetData(
+    const infos: undefined | structure = await betterKV.GetData(
       `warncase-${user.user.id}`,
       'warncases'
     );
@@ -140,12 +140,12 @@ WarnCommands.on(
     user: _arguments.guildMember()
   }),
   async (message, { user }) => {
-    if (!message.member.roles.some((r) => ADMIN_ROLE.includes(r))) {
+    if (!message.member.roles.some((r) => MOD_ROLE.includes(r))) {
       await message.reply('You are not permitted to use this command.');
       return;
     }
 
-    if (await Database.DeleteData(`warncase-${user.user.id}`, 'warncases'))
+    if (await betterKV.DeleteData(`warncase-${user.user.id}`, 'warncases'))
       await message.reply(
         `Warn cases for the user ${user.toMention()} were succesfully deleted.`
       );

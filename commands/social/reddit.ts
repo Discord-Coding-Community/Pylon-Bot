@@ -1,8 +1,8 @@
-import { command_prefix, MEMBER_PERMS } from '../../config/configs';
+import { COMMAND_PREFIX, MEMBER_PERMS } from '../../config/configs';
 
 const RedditCommand: discord.command.CommandGroup = new discord.command.CommandGroup(
   {
-    defaultPrefix: command_prefix,
+    defaultPrefix: COMMAND_PREFIX,
     filters: MEMBER_PERMS
   }
 );

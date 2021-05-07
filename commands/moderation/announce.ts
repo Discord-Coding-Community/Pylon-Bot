@@ -1,12 +1,12 @@
 import {
-  command_prefix,
+  COMMAND_PREFIX,
   MOD_PERMS,
   ANNOUNCEMENT_CHANNEL
 } from '../../config/configs';
 
 const NewsCommand: discord.command.CommandGroup = new discord.command.CommandGroup(
   {
-    defaultPrefix: command_prefix,
+    defaultPrefix: COMMAND_PREFIX,
     filters: MOD_PERMS
   }
 );

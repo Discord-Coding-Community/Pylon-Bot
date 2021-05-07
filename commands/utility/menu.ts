@@ -1,11 +1,11 @@
-import { command_prefix, MEMBER_PERMS, GUILD_ID } from '../../config/configs';
+import { COMMAND_PREFIX, MEMBER_PERMS, GUILD_ID } from '../../config/configs';
 
 var MSGID = '';
 var AUTHORID = '';
 var guildId = GUILD_ID;
 
 new discord.command.CommandGroup({
-  defaultPrefix: command_prefix
+  defaultPrefix: COMMAND_PREFIX
 }).raw(
   {
     name: 'menu',

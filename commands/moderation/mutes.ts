@@ -1,5 +1,5 @@
 import {
-  command_prefix,
+  COMMAND_PREFIX,
   MUTE_ROLE,
   MOD_PERMS
 } from '../../config/configs';
@@ -8,7 +8,7 @@ const muteKv = new pylon.KVNamespace('mutes');
 
 const MuteCommands: discord.command.CommandGroup = new discord.command.CommandGroup(
   {
-    defaultPrefix: command_prefix,
+    defaultPrefix: COMMAND_PREFIX,
     filters: MOD_PERMS
   }
 );

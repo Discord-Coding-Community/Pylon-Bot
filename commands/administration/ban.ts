@@ -1,8 +1,8 @@
-import { command_prefix, LOG_CHANNEL, ADMIN_PERMS } from '../../config/configs';
+import { COMMAND_PREFIX, LOG_CHANNEL, ADMIN_PERMS } from '../../config/configs';
 
 const BanCommand: discord.command.CommandGroup = new discord.command.CommandGroup(
   {
-    defaultPrefix: command_prefix,
+    defaultPrefix: COMMAND_PREFIX,
     filters: ADMIN_PERMS
   }
 );

@@ -1,8 +1,8 @@
-import { command_prefix, ADMIN_PERMS, LOG_CHANNEL } from '../../config/configs';
+import { COMMAND_PREFIX, ADMIN_PERMS, LOG_CHANNEL } from '../../config/configs';
 
 const KickCommand: discord.command.CommandGroup = new discord.command.CommandGroup(
   {
-    defaultPrefix: command_prefix,
+    defaultPrefix: COMMAND_PREFIX,
     filters: ADMIN_PERMS
   }
 );

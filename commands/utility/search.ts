@@ -1,12 +1,12 @@
 import {
-  command_prefix,
+  COMMAND_PREFIX,
   MEMBER_PERMS,
   WOLFRAM_API
 } from '../../config/configs';
 
 const QuerySlashCommand = discord.interactions.commands;
 const QueryCommand = new discord.command.CommandGroup({
-  defaultPrefix: command_prefix,
+  defaultPrefix: COMMAND_PREFIX,
   filters: MEMBER_PERMS
 });
 
