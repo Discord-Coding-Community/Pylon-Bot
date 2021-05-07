@@ -2,28 +2,29 @@
 var f = discord.command.filters;
 
 // Base Config
-export const command_prefix = ' ';
+export const COMMAND_PREFIX = ' ';
 export const GUILD_ID = ' ';
 
 // Images
 export const PYLON_ICON =
   'https://cdn.discordapp.com/icons/558032771558408246/4a00504cd8e382e703d4d88ec209044a.png';
-export const TWITTER_ICON = 'https://cdn2.iconfinder.com/data/icons/minimalism/512/twitter.png';
-
+export const TWITTER_ICON =
+  'https://cdn2.iconfinder.com/data/icons/minimalism/512/twitter.png';
+export const PING_THUMBNAIL = 'https://emoji.gg/assets/emoji/8299_Loading.gif';
 
 // API
 export const WOLFRAM_API = ' ';
 export const TWITTER_API = ' ';
-export const TWITTER_BEARER = ' ';
+export const TWITTER_BEARER =
+  'A ';
+export const PXLAPI_TOKEN = ' ';
 
 // Channel IDs
 export const LOG_CHANNEL = ' ';
 export const ANNOUNCEMENT_CHANNEL = ' ';
 export const MEMBER_COUNT_CHANNEL = ' ';
-export const NEWS_CHANNEL_1 = ' ';
-export const NEWS_CHANNEL_2 = ' ';
-export const NEWS_CHANNEL_3 = ' ';
-export const NEWS_CHANNEL_4 = ' ';
+export const NEWS_CHANNEL = ' ';
+export const JOIN_LEAVE_CHANNEL = ' ';
 
 // Role IDs
 export const MUTE_ROLE = ' ';
@@ -59,7 +60,7 @@ export const HELPER_PERMS = f.and(
   f.canMentionEveryone()
 );
 
-export const MEMBER_PERMS = f.and(
+export const USER_PERMS = f.and(
   f.canEmbedLinks(),
   f.canReadMessageHistory(),
   f.canAddReactions()
