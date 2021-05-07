@@ -28,4 +28,4 @@ This repo was created for use with storing and sharing code to use with [Pylon.b
 
 ### Support
 
- - **Discord**: [Pylon.bot](https://discord.gg/hC6Bbtj)
+ - **Discord**: [Invite](https://discord.gg/hC6Bbtj)
