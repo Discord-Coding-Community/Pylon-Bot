@@ -1,27 +1,31 @@
 // Modules
 import './modules/logger';
-import './modules/auto_publisher';
+import './modules/autopublisher';
+import './modules/functions';
 
 // Events
 import './events/message';
 
-// Administration Commands
-import './commands/administration/ban';
-import './commands/administration/banlist';
-import './commands/administration/kick';
-import './commands/administration/slowmode';
-import './commands/administration/warn';
+// Admin Commands
+import './commands/admin/ban';
+import './commands/admin/banlist';
+import './commands/admin/kick';
+import './commands/admin/slowmode';
 
-// Moderation Commands
-import './commands/moderation/announce';
-import './commands/moderation/mutes';
+// Economy Commands
+import './commands/economy/xp';
+
+// Mod Commands
+import './commands/mod/announce';
+import './commands/mod/warn';
+import './commands/mod/mute';
 
 // Social Commands
 import './commands/social/twitter';
 import './commands/social/reddit';
 
 // Utility Commands
-import './commands/utility/info'
-import './commands/utility/menu'
-import './commands/utility/ping'
-import './commands/utility/search'
+import './commands/util/info'
+import './commands/util/menu'
+import './commands/util/ping'
+import './commands/util/search'
