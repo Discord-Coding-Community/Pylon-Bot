@@ -1,16 +1,6 @@
-[![Release Date](https://img.shields.io/github/release-date/New-Horizon-Network/Pylon-Bot)](https://github.com/New-Horizon-Network/Pylon-Bot/releases)
-[![Commits](https://img.shields.io/github/last-commit/New-Horizon-Network/Pylon-Bot/main)](https://github.com/New-Horizon-Network/Pylon-Bot)
-[![Code Size](https://img.shields.io/github/languages/code-size/New-Horizon-Network/Pylon-Bot)](https://github.com/New-Horizon-Network/Pylon-Bot)
-
 # Pylon.bot
-
+Pylon App for use with [Pylon.bot](https://Pylon.bot).
 ![](https://raw.githubusercontent.com/New-Horizon-Network/Pylon-Bot/master/images/Screenshot_2020-11-01_02-25-13.png)
-
-## Information
-
-
-This repo was created for use with storing and sharing code to use with [Pylon.bot](https://Pylon.bot).
-
 
 ## Credits
 
