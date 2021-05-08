@@ -7,7 +7,7 @@ Pylon App for use with [Pylon.bot](https://Pylon.bot).
  - **Sipos Bence**: [Twitter Sub](https://github.com/Sickae/pylon-twitter-sub)
  - **Nate**: [Reddit](https://discord.com/channels/530557949098065930/695065184615792710/797328463961915394)
  - **liamhtml**: [Siri](https://discord.com/channels/530557949098065930/695065184615792710/813451541616001075)
- - **Florian Crafter**: [Warn Command Database](https://github.com/FlorianStrobl/Discord-Pylon-Bot/blob/master/Scripts/Functions/WarnCommandWDatabase.ts) | [TimeToStringMS](https://github.com/FlorianStrobl/Discord-Pylon-Bot/blob/master/Scripts/Functions/TimeStringToMS.ts) | [BetterKV](https://github.com/FlorianStrobl/Discord-Pylon-Bot/blob/master/Scripts/BetterKV/betterKV.ts)
+ - **Florian Crafter**: [Warn Command](https://github.com/FlorianStrobl/Discord-Pylon-Bot/blob/master/Scripts/Functions/WarnCommandWDatabase.ts) | [TimeToStringMS](https://github.com/FlorianStrobl/Discord-Pylon-Bot/blob/master/Scripts/Functions/TimeStringToMS.ts) | [BetterKV](https://github.com/FlorianStrobl/Discord-Pylon-Bot/blob/master/Scripts/BetterKV/betterKV.ts)
 
 ### Support
 
