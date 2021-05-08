@@ -3,10 +3,11 @@ import './modules/logger';
 import './modules/autopublisher';
 import './modules/functions';
 import './modules/siri';
+import './modules/dehoist';
 
 // Events
 import './events/message';
-import './events/error';
+import './events/join-leave';
 
 // Admin Commands
 import './commands/admin/ban';
@@ -28,6 +29,7 @@ import './commands/util/info';
 import './commands/util/menu';
 import './commands/util/ping';
 import './commands/util/search';
+import './commands/util/avatar';
 
 // Economy Commands
 import './commands/economy/xp';

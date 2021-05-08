@@ -76,6 +76,37 @@ function TimeCalculator(
   return;
 }
 
+export async function errorFn(
+  context: discord.command.ICommandContextDeprecated,
+  error: Error
+) {
+  console.error(error);
+  if (error.name !== 'ArgumentError') {
+    const error_message = `something unexpected happened (${error.name}: ${error.message})`;
+    await context.message.reply(
+      `${error_message}\n\`\`\`\n${error.stack}\`\`\``
+    );
+  } else {
+    const missing_args_message = `i need the correct arguments (${error.name}: ${error.message})`;
+    const usage = (context.command as any).argumentConfigList
+      .map((e: any) => {
+        const optional = (e[1].type as string).endsWith('Optional');
+        const brackets = {
+          left: optional ? '(' : '<',
+          right: optional ? ')' : '>'
+        };
+        return `${brackets.left}${e[0]}: ${e[1].type}${brackets.right}`;
+      })
+      .join(' ');
+    await context.message.reply(
+      `${missing_args_message}
+\`\`\`
+${usage}
+\`\`\``
+    );
+  }
+}
+
 export function CustomTimeStringToMS(time?: string): number | undefined {
   if (time === undefined) return;
 

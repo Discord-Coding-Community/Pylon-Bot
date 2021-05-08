@@ -1,5 +1,8 @@
 import { LOG_CHANNEL, PERMISSIONS } from '../config/configs';
 
+const msgKv = new pylon.KVNamespace('message');
+const authorKv = new pylon.KVNamespace('author');
+
 export namespace RoleUtil {
   /**
    * Union type between Role and Snowflake
@@ -187,8 +190,9 @@ discord.on('GUILD_ROLE_UPDATE', async (event, old) => {
     const diff = makePermissionDiff(event.role.permissions, old.permissions);
 
     const diffBlock = `\`\`\`diff
-${diff.added.length ? diff.added.join('\n') : ''}${diff.removed.length ? '\n' + diff.removed.join('\n') : ''
-      }󠁡
+${diff.added.length ? diff.added.join('\n') : ''}${
+      diff.removed.length ? '\n' + diff.removed.join('\n') : ''
+    }󠁡
 \`\`\``;
     messages.push(
       `${timestamp} ${discord.decor.Emojis.GEAR} (\`Guild Role Update\`) ${event.role.name} ${formattedID} permissions edited: ${diffBlock}`
@@ -203,7 +207,8 @@ ${diff.added.length ? diff.added.join('\n') : ''}${diff.removed.length ? '\n' + 
 
   if (event.role.hoist !== old.hoist) {
     messages.push(
-      `${timestamp} ${discord.decor.Emojis.GEAR} (\`Guild Role Update\`) ${event.role.name
+      `${timestamp} ${discord.decor.Emojis.GEAR} (\`Guild Role Update\`) ${
+        event.role.name
       } ${formattedID} hoist state was changed to \`${capitalizeWords(
         `${event.role.hoist}`
       )}\``
@@ -212,7 +217,8 @@ ${diff.added.length ? diff.added.join('\n') : ''}${diff.removed.length ? '\n' + 
 
   if (event.role.mentionable !== old.mentionable) {
     messages.push(
-      `${timestamp} ${discord.decor.Emojis.GEAR} (\`Guild Role Update\`) ${event.role.name
+      `${timestamp} ${discord.decor.Emojis.GEAR} (\`Guild Role Update\`) ${
+        event.role.name
       } ${formattedID} mentionable state was changed to \`${capitalizeWords(
         `${event.role.mentionable}`
       )}\``
@@ -221,7 +227,8 @@ ${diff.added.length ? diff.added.join('\n') : ''}${diff.removed.length ? '\n' + 
 
   if (event.role.managed !== old.managed) {
     messages.push(
-      `${timestamp} ${discord.decor.Emojis.GEAR} (\`Guild Role Update\`) ${event.role.name
+      `${timestamp} ${discord.decor.Emojis.GEAR} (\`Guild Role Update\`) ${
+        event.role.name
       } ${formattedID} managed role status was changed to \`${capitalizeWords(
         `${event.role.managed}`
       )}\``
@@ -266,19 +273,22 @@ discord.on(discord.Event.GUILD_UPDATE, async (current, old) => {
   const dmnKeys = ['All Messages', 'Only Mentions'];
   if (current.defaultMessageNotifications !== old.defaultMessageNotifications)
     messages.push(
-      `server default message notifications changed from **${dmnKeys[old.defaultMessageNotifications]
+      `server default message notifications changed from **${
+        dmnKeys[old.defaultMessageNotifications]
       }** to **${dmnKeys[current.defaultMessageNotifications]}**`
     );
   const nsfwLevelKeys = ['Disabled', 'Members Without Roles', 'All Members'];
   if (current.explicitContentFilter !== old.explicitContentFilter)
     messages.push(
-      `server explicit content filter changed from **${nsfwLevelKeys[old.explicitContentFilter]
+      `server explicit content filter changed from **${
+        nsfwLevelKeys[old.explicitContentFilter]
       }** to **${nsfwLevelKeys[current.explicitContentFilter]}**`
     );
   const verificationLevelKeys = ['None', 'Low', 'Medium', 'High', 'Very High'];
   if (current.verificationLevel !== old.verificationLevel)
     messages.push(
-      `server verification level changed from **${verificationLevelKeys[old.verificationLevel]
+      `server verification level changed from **${
+        verificationLevelKeys[old.verificationLevel]
       }** to **${verificationLevelKeys[current.verificationLevel]}**`
     );
 
@@ -289,7 +299,8 @@ discord.on(discord.Event.GUILD_UPDATE, async (current, old) => {
   const mfaLevelKeys = ['None', 'Elevated'];
   if (current.mfaLevel !== old.mfaLevel)
     messages.push(
-      `server 2fa requirement for moderation changed from **${mfaLevelKeys[old.mfaLevel]
+      `server 2fa requirement for moderation changed from **${
+        mfaLevelKeys[old.mfaLevel]
       }** to **${mfaLevelKeys[current.mfaLevel]}**`
     );
   if (current.ownerId !== old.ownerId)
@@ -383,3 +394,41 @@ export function makeArrayDiff(current: any[], old: any[]) {
     removed: old.filter((e) => !current.includes(e)).map((e) => `- ${e}`)
   };
 }
+
+discord.on('MESSAGE_CREATE', async (msg) => {
+  if (!(msg.channelId == LOG_CHANNEL) && msg.author.bot == false) {
+    await msgKv.put(msg.channelId, `${msg.content}`);
+    await authorKv.put(msg.channelId, msg.author.id);
+  }
+});
+discord.on('CHANNEL_DELETE', async (channel) => {
+  await msgKv.delete(channel.id);
+});
+discord.on('MESSAGE_DELETE', async (message) => {
+  const msgcontent = await msgKv.get(message.channelId);
+  const channelauthor = await authorKv.get<number>(message.channelId);
+  const embed = new discord.Embed();
+  const author = await discord.getUser(`${channelauthor}`);
+  const avatar = author.getAvatarUrl();
+  embed.setAuthor({
+    name: `${author.username}#${author.discriminator} | ID: ${channelauthor}`,
+    iconUrl: avatar
+  });
+  const server = await discord.getGuild();
+  const ChannelsID = await server.getChannel(`${message.channelId}`);
+  embed.setTitle(
+    `Message deleted in #${ChannelsID.name} 
+(Channel ID: ${message.channelId})`
+  );
+  embed.setDescription(`${msgcontent}`);
+  embed.setColor(0xff0000);
+  embed.setTimestamp(new Date().toISOString());
+  const guild = await discord.getGuild();
+  const channel = await guild.getChannel(LOG_CHANNEL);
+  if (guild && channel) {
+    await channel.sendMessage({
+      content: '',
+      embed: embed
+    });
+  }
+});

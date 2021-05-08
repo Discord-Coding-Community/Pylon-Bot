@@ -5,9 +5,20 @@ var f = discord.command.filters;
 export const COMMAND_PREFIX = ' ';
 export const GUILD_ID = ' ';
 
+// Auto DeHoist Characters
+export const AUTO_DEHOIST_CHARACTER_1 = '!';
+export const AUTO_DEHOIST_CHARACTER_2 = "'";
+export const AUTO_DEHOIST_CHARACTER_3 = '*';
+export const AUTO_DEHOIST_CHARACTER_4 = '.';
+export const AUTO_DEHOIST_CHARACTER_5 = ';';
+export const AUTO_DEHOIST_CHARACTER_6 = ')';
+export const AUTO_DEHOIST_CHARACTER_7 = '(';
+export const AUTO_DEHOIST_CHARACTER_8 = '?';
+export const AUTO_DEHOIST_CHARACTER_9 = '`';
+
 // Images
 export const PYLON_ICON =
-  'https://cdn.discordapp.com/icons/558032771558408246/4a00504cd8e382e703d4d88ec209044a.png';
+  'https://avatars.githubusercontent.com/u/56440847?s=280&v=4';
 export const TWITTER_ICON =
   'https://cdn2.iconfinder.com/data/icons/minimalism/512/twitter.png';
 export const PING_THUMBNAIL = 'https://emoji.gg/assets/emoji/8299_Loading.gif';
@@ -15,8 +26,7 @@ export const PING_THUMBNAIL = 'https://emoji.gg/assets/emoji/8299_Loading.gif';
 // API
 export const WOLFRAM_API = ' ';
 export const TWITTER_API = ' ';
-export const TWITTER_BEARER =
-  'A ';
+export const TWITTER_BEARER = ' ';
 export const PXLAPI_TOKEN = ' ';
 
 // Channel IDs
@@ -97,5 +107,10 @@ export const PERMISSIONS = [
   'MANAGE_NICKNAMES',
   'MANAGE_ROLES',
   'MANAGE_WEBHOOKS',
-  'MANAGE_EMOJIS'
+  'MANAGE_EMOJIS',
+  'REQUEST_TO_SPEAK',
+  'MANAGE_THREADS',
+  'USE_PUBLIC_THREADS',
+  'USE_PRIVATE_THREADS',
+  'USE_SLASH_COMMANDS'
 ];
