@@ -1,16 +1,7 @@
-import {
-  COMMAND_PREFIX,
-  USER_PERMS,
-  WOLFRAM_API
-} from '../../config/configs';
+import { config } from '../../modules/config/cfg';
+import { permissions } from '../../modules/config/permissions';
 
-const QuerySlashCommand = discord.interactions.commands;
-const QueryCommand = new discord.command.CommandGroup({
-  defaultPrefix: COMMAND_PREFIX,
-  filters: USER_PERMS
-});
-
-QuerySlashCommand.register(
+config.slashCommands.register(
   {
     name: 'search',
     description: 'Search with Wolfram Alpha API',
@@ -24,9 +15,9 @@ QuerySlashCommand.register(
   async (interaction, { query }) => {
     const s = Date.now();
     const api = await fetch(
-      `http://api.wolframalpha.com/v1/result?appid=${WOLFRAM_API}&i=${encodeURIComponent(
-        query
-      )}`
+      `http://api.wolframalpha.com/v1/result?appid=${
+        config.api.WOLFRAM_API
+      }&i=${encodeURIComponent(query)}`
     );
     const res = await api.text();
     await interaction.respond(`.
@@ -37,17 +28,18 @@ Result: ${res}
   }
 );
 
-QueryCommand.on(
+config.commands.on(
   {
     name: 'search',
     aliases: ['s', 'wolfram', 'ws', 'wa'],
-    description: 'Search with Wolfram Alpha API'
+    description: 'Search with Wolfram Alpha API',
+    filters: permissions.user
   },
   (args) => ({
     query: args.text()
   }),
   async (message, { query }) => {
-    const appId = WOLFRAM_API;
+    const appId = config.api.WOLFRAM_API;
 
     let api = await fetch(
       `http://api.wolframalpha.com/v1/result?appid=${appId}&i=${query}`

@@ -1,17 +1,7 @@
-import {
-  LOG_CHANNEL,
-  MOD_ROLE,
-  MUTE_ROLE,
-  USER_PERMS,
-  COMMAND_PREFIX
-} from '../../config/configs';
-const WarnCommands: discord.command.CommandGroup = new discord.command.CommandGroup(
-  {
-    defaultPrefix: COMMAND_PREFIX
-  }
-);
+import { config } from '../../modules/config/cfg';
+import { permissions } from '../../modules/config/permissions';
 
-import * as betterKV from '../../modules/db/betterKV';
+import * as betterKV from '../../database/betterKV';
 
 interface structure {
   index: string;
@@ -20,11 +10,12 @@ interface structure {
   timestamp: number[];
 }
 
-WarnCommands.on(
+config.commands.on(
   {
     name: 'warn',
     description:
-      'Warn a user for a specified reason.\n\n**Format**: [prefix]warn [user] [reason]\n**Examples**: ~warn @user#1234 spam'
+      'Warn a user for a specified reason.\n\n**Format**: [prefix]warn [user] [reason]\n**Examples**: ~warn @user#1234 spam',
+    filters: permissions.mod
   },
   (_arguments) => ({
     member: _arguments.guildMember(),
@@ -32,12 +23,18 @@ WarnCommands.on(
   }),
   async (message, { member, reason }) => {
     console.log('exect');
-    if (!message.member.roles.some((r) => MOD_ROLE.includes(r))) {
+    if (
+      !message.member.roles.some((r) =>
+        config.modules.admin.moderatorRole.includes(r)
+      )
+    ) {
       await message.reply('You are not permitted to use this command.');
       return;
     }
 
-    if (member.roles.some((r) => MOD_ROLE.includes(r))) {
+    if (
+      member.roles.some((r) => config.modules.admin.moderatorRole.includes(r))
+    ) {
       await message.reply("You can't warn a teammember.");
       return;
     }
@@ -48,8 +45,8 @@ WarnCommands.on(
     }
 
     try {
-      await member.removeRole(USER_PERMS);
-      await member.addRole(MUTE_ROLE);
+      await member.removeRole(config.modules.admin.defaultRole);
+      await member.addRole(config.modules.admin.muteRole);
     } catch (_) {}
 
     await message.reply(
@@ -57,7 +54,7 @@ WarnCommands.on(
     );
 
     discord
-      .getGuildTextChannel(LOG_CHANNEL)
+      .getGuildTextChannel(config.modules.logging.channel)
       .then((channel) =>
         channel?.sendMessage(
           `User ${member.toMention()} was warned by ${message.member.toMention()} with the reason: "${reason}".`
@@ -93,16 +90,21 @@ WarnCommands.on(
   }
 );
 
-WarnCommands.on(
+config.commands.on(
   {
     name: 'get-warns',
-    description: 'get warn info about a user'
+    description: 'get warn info about a user',
+    filters: permissions.mod
   },
   (_arguments) => ({
     user: _arguments.guildMember()
   }),
   async (message, { user }) => {
-    if (!message.member.roles.some((r) => MOD_ROLE.includes(r))) {
+    if (
+      !message.member.roles.some((r) =>
+        config.modules.admin.moderatorRole.includes(r)
+      )
+    ) {
       await message.reply('You are not permitted to use this command.');
       return;
     }
@@ -131,16 +133,21 @@ WarnCommands.on(
   }
 );
 
-WarnCommands.on(
+config.commands.on(
   {
     name: 'delete-warn',
-    description: 'delete all the cases from a user'
+    description: 'delete all the cases from a user',
+    filters: permissions.mod
   },
   (_arguments) => ({
     user: _arguments.guildMember()
   }),
   async (message, { user }) => {
-    if (!message.member.roles.some((r) => MOD_ROLE.includes(r))) {
+    if (
+      !message.member.roles.some((r) =>
+        config.modules.admin.moderatorRole.includes(r)
+      )
+    ) {
       await message.reply('You are not permitted to use this command.');
       return;
     }

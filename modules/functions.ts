@@ -1,4 +1,4 @@
-import { MEMBER_COUNT_CHANNEL } from '../config/configs';
+import { config } from '../../modules/config/cfg';
 
 enum timeUnits {
   ns = 1e-6,
@@ -150,7 +150,9 @@ export async function getLatency(cb: (...any: any[]) => Promise<any>) {
 }
 
 pylon.tasks.cron('update_member_count', '0 0/5 * * * * *', async () => {
-  const channel = await discord.getGuildVoiceChannel(MEMBER_COUNT_CHANNEL);
+  const channel = await discord.getGuildVoiceChannel(
+    config.modules.automated.memberCount.updateChannel.channel
+  );
   if (!channel) {
     return;
   }

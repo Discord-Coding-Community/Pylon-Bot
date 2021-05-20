@@ -334,7 +334,7 @@ export async function namespaceToOtherNamespace(
 
   try {
     await oldKV.delete('databaseKeySize');
-  } catch (_) { }
+  } catch (_) {}
 
   return !worked.includes(false);
 }
@@ -423,14 +423,14 @@ async function dbKeyOrder(namespace: string): Promise<boolean> {
 
       try {
         await KV.delete(`database_${size}`);
-      } catch (_) { }
+      } catch (_) {}
 
       --size;
 
       if (size === 0 || size === -1)
         try {
           await KV.delete(`databaseKeySize`);
-        } catch (_) { }
+        } catch (_) {}
       else await KV.put(`databaseKeySize`, size);
 
       await dbKeyOrder(KV.namespace);

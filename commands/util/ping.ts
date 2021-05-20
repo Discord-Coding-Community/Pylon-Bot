@@ -1,20 +1,12 @@
-import {
-  COMMAND_PREFIX,
-  USER_PERMS,
-  PING_THUMBNAIL
-} from '../../config/configs';
+import { config } from '../../modules/config/cfg';
+import { permissions } from '../../modules/config/permissions';
 
-const PingCommand: discord.command.CommandGroup = new discord.command.CommandGroup(
-  {
-    defaultPrefix: COMMAND_PREFIX,
-    filters: USER_PERMS
-  }
-);
-PingCommand.raw(
+config.commands.raw(
   {
     name: 'ping',
     aliases: ['echo', 'beep'],
-    description: "Responds with the bot's ping."
+    description: "Responds with the bot's ping.",
+    filters: permissions.user
   },
   async (msg) => {
     const embed = new discord.Embed();
@@ -23,7 +15,7 @@ PingCommand.raw(
     embed.setTitle(`**__PING__**`);
     embed.setDescription(`The ping is ${latency}ms`);
     embed.setThumbnail({
-      url: PING_THUMBNAIL
+      url: config.images.loadingImage
     });
     embed.setColor(0xf600ff);
     embed.setTimestamp(new Date().toISOString());

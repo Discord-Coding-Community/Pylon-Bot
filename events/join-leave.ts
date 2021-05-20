@@ -1,4 +1,4 @@
-import { JOIN_LEAVE_CHANNEL, PXLAPI_TOKEN } from '../config/configs';
+import { config } from '../../modules/config/cfg';
 
 enum Type {
   JOIN,
@@ -9,7 +9,9 @@ const joinLeaveImage = async (
   type: Type,
   member: discord.GuildMember | discord.Event.IGuildMemberRemove
 ) => {
-  const channel = await discord.getGuildTextChannel(JOIN_LEAVE_CHANNEL);
+  const channel = await discord.getGuildTextChannel(
+    config.modules.automated.onJoin.channel
+  );
   if (!channel) throw new Error('Invalid channel');
 
   const code = `
@@ -52,7 +54,7 @@ const joinLeaveImage = async (
     }),
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Application ${PXLAPI_TOKEN}`
+      Authorization: `Application ${config.api.PXLAPI_TOKEN}`
     },
     method: 'POST'
   });

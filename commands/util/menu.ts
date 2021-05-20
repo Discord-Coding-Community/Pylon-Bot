@@ -1,29 +1,16 @@
-import { COMMAND_PREFIX, USER_PERMS, GUILD_ID } from '../../config/configs';
+import { config } from '../../modules/config/cfg';
+import { permissions } from '../../modules/config/permissions';
 
 var MSGID = '';
 var AUTHORID = '';
-var guildId = GUILD_ID;
+var guildId = config.guildId;
 
-new discord.command.CommandGroup({
-  defaultPrefix: COMMAND_PREFIX
-}).raw(
+config.commands.raw(
   {
     name: 'menu',
-    aliases: [
-      'help',
-      'h',
-      'Menu',
-      'Help',
-      'H',
-      'm',
-      'M',
-      'commands',
-      'Commands',
-      'cmds',
-      'cmdhelp'
-    ],
+    aliases: ['help', 'h'],
     description: 'Pylon Help Menu',
-    filters: USER_PERMS
+    filters: permissions.user
   },
   async (msg) => {
     const menu = new discord.Embed();
