@@ -1,27 +1,19 @@
-import {
-  COMMAND_PREFIX,
-  MUTE_ROLE,
-  MOD_PERMS
-} from '../../config/configs';
+import { config } from '../../modules/config/cfg';
+import { permissions } from '../../modules/config/permissions';
 
 const muteKv = new pylon.KVNamespace('mutes');
 
-const MuteCommands: discord.command.CommandGroup = new discord.command.CommandGroup(
-  {
-    defaultPrefix: COMMAND_PREFIX,
-    filters: MOD_PERMS
-  }
-);
-
 async function TempMute(member: discord.GuildMember, duration: number) {
-  if (!member.roles.includes(MUTE_ROLE)) await member.addRole(MUTE_ROLE);
+  if (!member.roles.includes(config.modules.admin.muteRole))
+    await member.addRole(config.modules.admin.muteRole);
   await muteKv.put(member.user.id, Date.now() + duration, {
     ifNotExists: true
   });
 }
 
 async function UnMute(member: discord.GuildMember) {
-  if (member.roles.includes(MUTE_ROLE)) await member.removeRole(MUTE_ROLE);
+  if (member.roles.includes(config.modules.admin.muteRole))
+    await member.removeRole(config.modules.admin.muteRole);
   await muteKv.delete(member.user.id);
 }
 
@@ -33,14 +25,17 @@ pylon.tasks.cron('Every_5_Min', '0 0/5 * * * * *', async () => {
   await Promise.all(
     items.map(async (val) => {
       const member = await guild.getMember(val.key);
-      if (member === null || !member.roles.includes(MUTE_ROLE)) {
+      if (
+        member === null ||
+        !member.roles.includes(config.modules.admin.muteRole)
+      ) {
         toRemove.push(val.key);
         return;
       }
       if (typeof val.value !== 'number') return;
       const diff = now - val.value;
       if (diff > 0) {
-        await member.removeRole(MUTE_ROLE);
+        await member.removeRole(config.modules.admin.muteRole);
         toRemove.push(val.key);
       }
     })
@@ -50,10 +45,12 @@ pylon.tasks.cron('Every_5_Min', '0 0/5 * * * * *', async () => {
   }
 });
 
-MuteCommands.on(
+config.commands.on(
   {
     name: 'mute',
-    aliases: ['m']
+    aliases: ['m'],
+    description: 'Mute a user for a specified amount of time.',
+    filters: permissions.mod
   },
   (ctx) => ({
     member: ctx.guildMember(),
@@ -61,29 +58,34 @@ MuteCommands.on(
   }),
   async (msg, { member, duration }) => {
     await msg.reply(async () => {
-      if (member.roles.includes(MUTE_ROLE))
+      if (member.roles.includes(config.modules.admin.muteRole))
         return 'The target is already muted!';
       await TempMute(member, duration * 1000 * 60);
-      return `${discord.decor.Emojis.WHITE_CHECK_MARK
-        } ${member.toMention()} was muted for ${duration} minutes!`;
+      return `${
+        discord.decor.Emojis.WHITE_CHECK_MARK
+      } ${member.toMention()} was muted for ${duration} minutes!`;
     });
   }
 );
 
-MuteCommands.on(
+config.commands.on(
   {
     name: 'unmute',
-    aliases: ['u']
+    aliases: ['u'],
+    description: 'Unmute a user.',
+    filters: permissions.mod
   },
   (ctx) => ({
     member: ctx.guildMember()
   }),
   async (msg, { member }) => {
     await msg.reply(async () => {
-      if (!member.roles.includes(MUTE_ROLE)) return 'The target is not muted!';
+      if (!member.roles.includes(config.modules.admin.muteRole))
+        return 'The target is not muted!';
       await UnMute(member);
-      return `${discord.decor.Emojis.WHITE_CHECK_MARK
-        } ${member.toMention()} was un-muted!`;
+      return `${
+        discord.decor.Emojis.WHITE_CHECK_MARK
+      } ${member.toMention()} was un-muted!`;
     });
   }
 );

@@ -1,17 +1,11 @@
-import { COMMAND_PREFIX, USER_PERMS } from '../../config/configs';
-
-const RedditCommand: discord.command.CommandGroup = new discord.command.CommandGroup(
-  {
-    defaultPrefix: COMMAND_PREFIX,
-    filters: USER_PERMS
-  }
-);
-
-RedditCommand.on(
+import { config } from '../../modules/config/cfg';
+import { permissions } from '../../modules/config/permissions';
+config.commands.on(
   {
     name: 'reddit',
     aliases: ['r'],
-    description: 'Fetch a random post from a specified subreddit.'
+    description: 'Fetch a random post from a specified subreddit.',
+    filters: permissions.user
   },
 
   (args) => ({
@@ -23,7 +17,7 @@ RedditCommand.on(
         `❌ Sorry ${message.author.toMention()}, You need a Subreddit to Fetch a Post from`
       );
     } else {
-      const req = await fetch(`https://api.reddit.com/${subReddit}/`);
+      const req = await fetch(`https://api.reddit.com/r/${subReddit}/`);
       const data = await req.json();
       const { children } = data.data;
       const len = children.length;
@@ -37,7 +31,7 @@ RedditCommand.on(
             url: post.data.url
           },
           footer: {
-            text: `Fetched from https://www.reddit.com/${subReddit}/\nRequested By ${message.author.getTag()}`
+            text: `Fetched from r/${subReddit}`
           },
           timestamp: new Date().toISOString()
         })

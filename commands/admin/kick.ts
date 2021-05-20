@@ -1,16 +1,11 @@
-import { COMMAND_PREFIX, ADMIN_PERMS, LOG_CHANNEL } from '../../config/configs';
+import { config } from '../../modules/config/cfg';
+import { permissions } from '../../modules/config/permissions';
 
-const KickCommand: discord.command.CommandGroup = new discord.command.CommandGroup(
-  {
-    defaultPrefix: COMMAND_PREFIX,
-    filters: ADMIN_PERMS
-  }
-);
-
-KickCommand.on(
+config.commands.on(
   {
     name: 'kick',
-    aliases: ['k']
+    aliases: ['k'],
+    filters: permissions.admin
   },
   (args) => ({
     member: args.guildMember(),
@@ -18,7 +13,9 @@ KickCommand.on(
   }),
   async (message, { member }) => {
     const guild = await discord.getGuild();
-    const channel = await discord.getGuildTextChannel(LOG_CHANNEL);
+    const channel = await discord.getGuildTextChannel(
+      config.modules.logging.channel
+    );
 
     const logger = new discord.Embed();
     logger.setTitle('**__USER KICKED__**');

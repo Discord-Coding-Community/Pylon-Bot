@@ -1,16 +1,10 @@
-import {
-  COMMAND_PREFIX,
-  ADMIN_ROLE,
-  TWITTER_API,
-  TWITTER_BEARER,
-  TWITTER_ICON
-} from '../../config/configs';
+import { config } from '../../modules/config/cfg';
 
 const TwitterSubCfg = {
-  TWITTER_API_KEY: TWITTER_API,
-  TWITTER_BEARER_TOKEN: TWITTER_BEARER,
-  ICON_URL: TWITTER_ICON,
-  REQUIRED_ROLE_ID: ADMIN_ROLE
+  TWITTER_API_KEY: config.api.TWITTER_API,
+  TWITTER_BEARER_TOKEN: config.api.TWITTER_BEARER,
+  ICON_URL: config.images.twitterIcon,
+  REQUIRED_ROLE_ID: config.modules.admin.adminRole
 };
 
 class TwitterClient {
@@ -65,13 +59,6 @@ class TwitterClient {
   }
 }
 
-const cmd = new discord.command.CommandGroup({
-  defaultPrefix: COMMAND_PREFIX,
-  filters:
-    TwitterSubCfg.REQUIRED_ROLE_ID?.length > 0
-      ? discord.command.filters.hasRole(TwitterSubCfg.REQUIRED_ROLE_ID)
-      : undefined
-});
 const twitterSubKv = new pylon.KVNamespace('twitter-subs');
 
 interface TwitterSub {
@@ -88,9 +75,16 @@ interface TwitterUser {
   screen_name: string;
 }
 
-cmd.subcommand('twitter', (subcmd) => {
+config.commands.subcommand('twitter', (subcmd) => {
   subcmd.on(
-    'sub',
+    {
+      name: 'sub',
+      description: 'Subscribe to a Twitter feed.',
+      filters:
+        TwitterSubCfg.REQUIRED_ROLE_ID?.length > 0
+          ? discord.command.filters.hasRole(TwitterSubCfg.REQUIRED_ROLE_ID)
+          : undefined
+    },
     (ctx) => ({
       username: ctx.string(),
       channel: ctx.stringOptional()
@@ -113,7 +107,7 @@ cmd.subcommand('twitter', (subcmd) => {
         await msg.reply(
           createEmbedMessage(
             `:x: There is a subscription already to this feed in ${subChannel?.toMention() ??
-            '*Unknown channel*'}`
+              '*Unknown channel*'}`
           )
         );
         return;
@@ -136,7 +130,8 @@ cmd.subcommand('twitter', (subcmd) => {
       let twitterNames = await TwitterClient.getUserNames([userId]);
       await msg.reply(
         createEmbedMessage(
-          `:white_check_mark: Successfully subscribed to [@${twitterNames[0]
+          `:white_check_mark: Successfully subscribed to [@${
+            twitterNames[0]
           }](https://twitter.com/${twitterNames[0]}) in ${ch.toMention()}`
         )
       );
@@ -146,7 +141,14 @@ cmd.subcommand('twitter', (subcmd) => {
   );
 
   subcmd.on(
-    'unsub',
+    {
+      name: 'unsub',
+      description: 'Unsubscribe from a Twitter feed.',
+      filters:
+        TwitterSubCfg.REQUIRED_ROLE_ID?.length > 0
+          ? discord.command.filters.hasRole(TwitterSubCfg.REQUIRED_ROLE_ID)
+          : undefined
+    },
     (ctx) => ({ username: ctx.string() }),
     async (msg, { username }) => {
       let userId = await TwitterClient.getUserIdByUserName(username);
@@ -178,33 +180,43 @@ cmd.subcommand('twitter', (subcmd) => {
     }
   );
 
-  subcmd.raw('list', async (msg) => {
-    let keys = await twitterSubKv.list();
-    if (keys.length == 0) {
-      await msg.reply(createEmbedMessage(':x: There are no subscriptions'));
-      return;
-    }
+  subcmd.raw(
+    {
+      name: 'list',
+      description: 'List all subscribed Twitter feeds.',
+      filters:
+        TwitterSubCfg.REQUIRED_ROLE_ID?.length > 0
+          ? discord.command.filters.hasRole(TwitterSubCfg.REQUIRED_ROLE_ID)
+          : undefined
+    },
+    async (msg) => {
+      let keys = await twitterSubKv.list();
+      if (keys.length == 0) {
+        await msg.reply(createEmbedMessage(':x: There are no subscriptions'));
+        return;
+      }
 
-    let items = await twitterSubKv.items();
-    let usernames = await TwitterClient.getUserNames(keys);
-    let listMsg = new Array<string>();
+      let items = await twitterSubKv.items();
+      let usernames = await TwitterClient.getUserNames(keys);
+      let listMsg = new Array<string>();
 
-    for (let i = 0; i < keys.length; i++) {
-      let sub: TwitterSub = JSON.parse(items[i].value as string);
-      let channel = await discord.getGuildTextChannel(sub.channelId);
-      listMsg.push(
-        `@${usernames[i]} -> ${channel?.toMention() ?? '*Unknown channel*'}`
+      for (let i = 0; i < keys.length; i++) {
+        let sub: TwitterSub = JSON.parse(items[i].value as string);
+        let channel = await discord.getGuildTextChannel(sub.channelId);
+        listMsg.push(
+          `@${usernames[i]} -> ${channel?.toMention() ?? '*Unknown channel*'}`
+        );
+      }
+
+      await msg.reply(
+        createEmbedMessage(
+          listMsg.join('\n'),
+          'Subscriptions',
+          `${keys.length} subscribed feeds`
+        )
       );
     }
-
-    await msg.reply(
-      createEmbedMessage(
-        listMsg.join('\n'),
-        'Subscriptions',
-        `${keys.length} subscribed feeds`
-      )
-    );
-  });
+  );
 
   subcmd.raw('poll', async (msg) => {
     let tweetCount = await fetchTweets();

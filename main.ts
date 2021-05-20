@@ -1,9 +1,8 @@
 // Modules
-import './modules/logger';
 import './modules/autopublisher';
 import './modules/functions';
-import './modules/siri';
-import './modules/dehoist';
+import './modules/reactroles/reactions';
+import './modules/logger/logging';
 
 // Events
 import './events/message';
@@ -14,6 +13,7 @@ import './commands/admin/ban';
 import './commands/admin/banlist';
 import './commands/admin/kick';
 import './commands/admin/slowmode';
+import './commands/admin/tag';
 
 // Mod Commands
 import './commands/mod/announce';

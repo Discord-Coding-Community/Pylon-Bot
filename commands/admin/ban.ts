@@ -1,17 +1,12 @@
-import { COMMAND_PREFIX, LOG_CHANNEL, ADMIN_PERMS } from '../../config/configs';
+import { config } from '../../modules/config/cfg';
+import { permissions } from '../../modules/config/permissions';
 
-const BanCommand: discord.command.CommandGroup = new discord.command.CommandGroup(
-  {
-    defaultPrefix: COMMAND_PREFIX,
-    filters: ADMIN_PERMS
-  }
-);
-
-BanCommand.on(
+config.commands.on(
   {
     name: 'ban',
     aliases: ['b', 'user-ban', 'banuser', 'banmember', 'ban-member'],
-    description: 'Ban a specified user from the guild for a specified reason.'
+    description: 'Ban a specified user from the guild for a specified reason.',
+    filters: permissions.admin
   },
   (args) => ({
     user: args.user(),
@@ -19,7 +14,9 @@ BanCommand.on(
   }),
   async (message, { user, reason }) => {
     const guild = await discord.getGuild();
-    const channel = await discord.getGuildTextChannel(LOG_CHANNEL);
+    const channel = await discord.getGuildTextChannel(
+      config.modules.logging.channel
+    );
 
     await guild.createBan(user, {
       deleteMessageDays: 7,
@@ -60,3 +57,4 @@ BanCommand.on(
     }
   }
 );
+

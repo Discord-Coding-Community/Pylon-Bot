@@ -1,24 +1,20 @@
-import { COMMAND_PREFIX, ADMIN_PERMS } from '../../config/configs';
-
-const cmds: discord.command.CommandGroup = new discord.command.CommandGroup({
-  defaultPrefix: COMMAND_PREFIX,
-  filters: ADMIN_PERMS
-});
-
+import { config } from '../../modules/config/cfg';
+import { permissions } from '../../modules/config/permissions';
 import { CustomTimeStringToMS } from '../../modules/functions';
 
-cmds.on(
+config.commands.on(
   {
     name: 'slowmode',
-    aliases: ['slow', 'smode', 'slow-mode'],
+    aliases: ['slow', 'smode', 'slow-mode', 'sm'],
     description:
-      'Apply slowmode to a channel\n\n**Format**: [prefix]slowmode [time: string] [channel: guildTextChannelOptional]\n**Examples**: ~slowmode 1m #bot-commands'
+      'Apply slowmode to a channel\n\n**Format**: [prefix]slowmode [time: string] [channel: guildTextChannelOptional]\n**Examples**: ~slowmode 1m #bot-commands',
+    filters: permissions.admin
   },
   (args) => ({ time: args.string(), channel: args.guildTextChannelOptional() }),
   async (msg, { time, channel }) => {
     if (
       !(await discord.command.filters
-        .canManageChannels(channel?.id ?? msg.channelId)
+        .canManageChannels(channel ? channel.id : msg.channelId)
         .filter(msg))
     ) {
       await msg?.reply(`You don't have the permission for this command`);
@@ -38,7 +34,7 @@ cmds.on(
     await msg?.reply(
       `You set the slowmode for the channel <#${theChannel.id}> to ${(
         settedTime / 60
-      ).toFixed(2)} minutes!`
+      ).toFixed(2)} minute(s)!`
     );
   }
 );

@@ -1,26 +1,21 @@
-import {
-  COMMAND_PREFIX,
-  MOD_PERMS,
-  ANNOUNCEMENT_CHANNEL
-} from '../../config/configs';
+import { config } from '../../modules/config/cfg';
+import { permissions } from '../../modules/config/permissions';
 
-const NewsCommand: discord.command.CommandGroup = new discord.command.CommandGroup(
-  {
-    defaultPrefix: COMMAND_PREFIX,
-    filters: MOD_PERMS
-  }
-);
-NewsCommand.on(
+config.commands.on(
   {
     name: 'announce',
-    aliases: ['ann', 'a']
+    aliases: ['ann', 'a'],
+    description: 'Send an announcement to the guild announcements channel',
+    filters: permissions.mod
   },
   (args) => ({
     content: args.text()
   }),
   async (message, { content }) => {
     const guild = await discord.getGuild();
-    const a = await discord.getGuildNewsChannel(ANNOUNCEMENT_CHANNEL);
+    const a = await discord.getGuildNewsChannel(
+      config.modules.mod.commands.announce.channel
+    );
     message.reply('Your Announcement has been sent');
     message.delete();
     const embed = new discord.Embed();

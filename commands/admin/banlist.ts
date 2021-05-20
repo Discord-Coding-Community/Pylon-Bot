@@ -1,16 +1,12 @@
-import { COMMAND_PREFIX, ADMIN_PERMS } from '../../config/configs';
+import { config } from '../../modules/config/cfg';
+import { permissions } from '../../modules/config/permissions';
 
-const BanListCommand: discord.command.CommandGroup = new discord.command.CommandGroup(
-  {
-    defaultPrefix: COMMAND_PREFIX,
-    filters: ADMIN_PERMS
-  }
-);
-BanListCommand.raw(
+config.commands.raw(
   {
     name: 'banlist',
     aliases: ['bl', 'blist', 'bans', 'banned', 'banned-members', 'userbans'],
-    description: 'Responds with a list of banned users.'
+    description: 'Responds with a list of banned users.',
+    filters: permissions.admin
   },
   async (message) => {
     await message.delete();
@@ -24,23 +20,23 @@ BanListCommand.raw(
           banlist[i].user.id
         })\n**BAN REASON**\n${banlist[i].reason}` + `\n\n`;
     }
-    const logger = new discord.Embed();
-    logger.setTitle('**__BANNED USERS__**');
-    logger.setColor(0xff0000);
-    logger.setDescription(text);
-    logger.setThumbnail({
+    const embed = new discord.Embed();
+    embed.setTitle('**__BANNED USERS__**');
+    embed.setColor(0xff0000);
+    embed.setDescription(text);
+    embed.setThumbnail({
       url: `${guild.getIconUrl(discord.ImageType.PNG)}`
     });
-    logger.setFooter({
+    embed.setFooter({
       text: guild.name,
       iconUrl: `${guild.getIconUrl(discord.ImageType.PNG)}`
     });
-    logger.setTimestamp(new Date().toISOString());
+    embed.setTimestamp(new Date().toISOString());
     if (guild) {
       message.addReaction('✅');
       await message.reply({
         content: '',
-        embed: logger
+        embed: embed
       });
     }
   }

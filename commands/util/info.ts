@@ -1,11 +1,5 @@
-import { COMMAND_PREFIX, USER_PERMS } from '../../config/configs';
-
-const InfoCommands: discord.command.CommandGroup = new discord.command.CommandGroup(
-  {
-    defaultPrefix: COMMAND_PREFIX,
-    filters: USER_PERMS
-  }
-);
+import { config } from '../../modules/config/cfg';
+import { permissions } from '../../modules/config/permissions';
 
 const timeMap = new Map([
   ['decade', 1000 * 60 * 60 * 24 * 365 * 10],
@@ -62,11 +56,12 @@ function decomposeSnowflake(snowflake: string) {
   return res;
 }
 
-InfoCommands.raw(
+config.commands.raw(
   {
     name: 'guild',
     aliases: ['g'],
-    description: 'Displays the guild info'
+    description: 'Displays the guild info',
+    filters: permissions.user
   },
   async (message) => {
     let edmsg = message.reply('<a:loading:735794724480483409>');
@@ -96,7 +91,7 @@ InfoCommands.raw(
 
     let preferredLocale =
       typeof guild.preferredLocale === 'string' &&
-        guild.features.includes(discord.Guild.Feature.DISCOVERABLE)
+      guild.features.includes(discord.Guild.Feature.DISCOVERABLE)
         ? `\n  󠇰**Preferred Locale**: \`${guild.preferredLocale}\`\n`
         : '';
     let boosts =
@@ -126,8 +121,8 @@ InfoCommands.raw(
     let widget =
       guild.widgetEnabled === true
         ? '\n  󠇰**Widget**: ' +
-        discord.decor.Emojis.WHITE_CHECK_MARK +
-        ` ( ${widgetChannel} )`
+          discord.decor.Emojis.WHITE_CHECK_MARK +
+          ` ( ${widgetChannel} )`
         : '';
     let features =
       guild.features.length > 0 ? guild.features.join(', ') : 'None';
@@ -149,7 +144,7 @@ InfoCommands.raw(
       store: 0
     };
     let channels = await guild.getChannels();
-    channels.forEach(function (ch) {
+    channels.forEach(function(ch) {
       if (ch.type === discord.GuildChannel.Type.GUILD_TEXT) counts.text++;
       if (ch.type === discord.GuildChannel.Type.GUILD_VOICE) counts.voice++;
       if (ch.type === discord.GuildChannel.Type.GUILD_STORE) counts.store++;
@@ -169,13 +164,13 @@ InfoCommands.raw(
       if (obj > 0)
         chanStats.push(
           '\n ' +
-          emj +
-          '**' +
-          k.substr(0, 1).toUpperCase() +
-          k.substr(1) +
-          '**: **' +
-          obj +
-          '**'
+            emj +
+            '**' +
+            k.substr(0, 1).toUpperCase() +
+            k.substr(1) +
+            '**: **' +
+            obj +
+            '**'
         );
     }
     desc += '\n\n**❯ **Channels ⎯ ' + channels.length + chanStats.join('');
@@ -285,11 +280,12 @@ InfoCommands.raw(
   }
 );
 
-InfoCommands.on(
+config.commands.on(
   {
     name: 'info',
     aliases: ['i', 'user'],
-    description: 'Displays the user info of a specified user'
+    description: 'Displays the user info of a specified user',
+    filters: permissions.user
   },
   (ctx) => ({ user: ctx.userOptional() }),
   async (msg, { user }) => {
@@ -339,13 +335,15 @@ InfoCommands.on(
             emjMention =
               pres.emoji.id === null
                 ? pres.emoji.name
-                : `<${pres.emoji.animated === true ? 'a' : ''}:${pres.emoji.name
-                }:${pres.emoji.id}>`;
+                : `<${pres.emoji.animated === true ? 'a' : ''}:${
+                    pres.emoji.name
+                  }:${pres.emoji.id}>`;
           } else {
             emjMention = discord.decor.Emojis.NOTEPAD_SPIRAL;
           }
-          return `${emjMention}${pres.state !== null ? ` \`${pres.state}\`` : ''
-            } (Custom Status)`;
+          return `${emjMention}${
+            pres.state !== null ? ` \`${pres.state}\`` : ''
+          } (Custom Status)`;
         }
 
         return `${emj}${pres.name.length > 0 ? ` \`${pres.name}\`` : ''}`;
