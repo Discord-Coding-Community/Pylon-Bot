@@ -2,35 +2,64 @@ var f = discord.command.filters;
 
 export const permissions = {
   admin: f.and(
+    f.canViewAuditLog(),
+    f.canViewGuildInsights(),
+    f.canManageChannelWebhooks(),
     f.canManageChannels(),
     f.canManageMessages(),
+    f.canManageNicknames(),
     f.canBanMembers(),
     f.canKickMembers(),
-    f.canManageChannelWebhooks(),
-    f.canViewAuditLog(),
-    f.canViewGuildInsights()
+    f.canMoveMembers(),
+    f.canMuteMembers(),
+    f.canMentionEveryone(),
+    f.canPrioritySpeaker(),
+    f.canReadMessageHistory(),
+    f.canEmbedLinks(),
+    f.canAddReactions(),
+    f.canAttachFiles(),
+    f.canConnect(),
+    f.canSpeak()
   ),
 
   mod: f.and(
     f.canManageMessages(),
-    f.canManageGuild(),
-    f.canPrioritySpeaker(),
-    f.canMuteMembers(),
+    f.canManageNicknames(),
+    f.canBanMembers(),
+    f.canKickMembers(),
     f.canMoveMembers(),
-    f.canMentionEveryone()
+    f.canMuteMembers(),
+    f.canMentionEveryone(),
+    f.canPrioritySpeaker(),
+    f.canReadMessageHistory(),
+    f.canEmbedLinks(),
+    f.canAddReactions(),
+    f.canAttachFiles(),
+    f.canConnect(),
+    f.canSpeak()
   ),
 
   helper: f.and(
     f.canManageMessages(),
-    f.canMuteMembers(),
+    f.canManageNicknames(),
     f.canMoveMembers(),
-    f.canMentionEveryone()
+    f.canMuteMembers(),
+    f.canMentionEveryone(),
+    f.canReadMessageHistory(),
+    f.canEmbedLinks(),
+    f.canAddReactions(),
+    f.canAttachFiles(),
+    f.canConnect(),
+    f.canSpeak()
   ),
 
   user: f.and(
-    f.canEmbedLinks(),
     f.canReadMessageHistory(),
-    f.canAddReactions()
+    f.canEmbedLinks(),
+    f.canAddReactions(),
+    f.canAttachFiles(),
+    f.canConnect(),
+    f.canSpeak()
   ),
 
   perms: [
@@ -72,5 +101,4 @@ export const permissions = {
     'USE_SLASH_COMMANDS'
   ]
 };
-
 export default permissions;
