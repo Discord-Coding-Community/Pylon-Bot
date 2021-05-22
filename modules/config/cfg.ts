@@ -1,6 +1,8 @@
 import { apiKeys } from './api';
 import { messages } from '../logger/';
 import { img } from './images';
+import { permissions } from './permissions';
+
 export const config = {
   slashCommands: discord.interactions.commands,
   commands: new discord.command.CommandGroup({
@@ -16,16 +18,15 @@ export const config = {
     id: discord.getBotId()
   },
   api: {
-      TWITTER_API: apiKeys.twitterAPI,
-      WOLFRAM_API: apiKeys.wolframAPI,
-      TWITTER_BEARER: apiKeys.twitterBearer,
-      PXLAPI_TOKEN: apiKeys.pxlAPI,
+    TWITTER_API: apiKeys.twitterAPI,
+    WOLFRAM_API: apiKeys.wolframAPI,
+    TWITTER_BEARER: apiKeys.twitterBearer,
+    PXLAPI_TOKEN: apiKeys.pxlAPI
   },
   images: {
-      twitterIcon: img.twitter,
-      pylonIcon: img.pylon,
-      loadingImage: img.ping
-
+    twitterIcon: img.twitter,
+    pylonIcon: img.pylon,
+    loadingImage: img.ping
   },
   guildId: '801125364218200074', // Discord Coding Community
   welcomeChannel: '801125364646150200',
@@ -33,7 +34,7 @@ export const config = {
     logging: {
       enabled: true,
       timezone: 'America/Phoenix',
-      channel: '844734009623445514', // 📝｜pylon-logs
+      channel: '844734009623445514', // 📝｜pylon-log
       showTimestamps: true,
       showEventNames: true,
       scopes: {
@@ -66,11 +67,19 @@ export const config = {
         webhooksUpdate: true
       }
     },
+    permissions: {
+      admin: permissions.admin,
+      mod: permissions.mod,
+      helper: permissions.helper,
+      user: permissions.user,
+      perms: permissions.perms
+    },
     automated: {
       autopublisher: {
-          enabled: true,
-          announcements: '801274126907080704',
-          blacklist: '844733521561255956'
+        enabled: true,
+        channels: ['801274126907080704', '844733521561255956'],
+        announcements: true,
+        blacklist: true
       },
       memberCount: {
         updateChannel: {
@@ -79,125 +88,127 @@ export const config = {
         }
       },
       onJoin: {
-          enabled: true,
-          channel: '801125364646150200'
+        enabled: true,
+        channel: '801125364646150200'
       },
       onLeave: {
-          enabled: true,
-          channel: '801125364646150200'
+        enabled: true,
+        channel: '801125364646150200'
       }
     },
     mod: {
       enabled: true,
       commands: {
-          announce: { 
-              enabled: true, 
-              channel: '801274126907080704'},
-          mute: true,
-          unmute: true,
-          warn: true
-        }
-      },
-      admin: {
-        enabled: true,
-        defaultRole: '801125364218200076',
-        muteRole: '801125364218200075',
-        adminRole: '801125364252147744',
-        moderatorRole: '801125364252147743',
-        autoRoles: {
+        announce: {
           enabled: true,
-          human: ['801125364218200077'],
-          bot: ['804529912928927794']
+          channel: '801274126907080704'
         },
-        reactRoles: {
-          enabled: true,
-          definitions: [
-            {
-                role: 'role.id',
-                message: 'message.id',
-                emoji: discord.decor.Emojis.EMOJI_TAG,
-                type: 'toggle'
-              },  
-            {
-                role: 'role.id',
-                message: 'message.id',
-                emoji: discord.decor.Emojis.EMOJI_TAG,
-                type: 'toggle'
-              },  
-            {
-                role: 'role.id',
-                message: 'message.id',
-                emoji: discord.decor.Emojis.EMOJI_TAG,
-                type: 'toggle'
-              },  
-            {
-                role: 'role.id',
-                message: 'message.id',
-                emoji: discord.decor.Emojis.EMOJI_TAG,
-                type: 'toggle'
-              },  
-            {
-                role: 'role.id',
-                message: 'message.id',
-                emoji: discord.decor.Emojis.EMOJI_TAG,
-                type: 'toggle'
-              },  
-            {
-              role: 'role.id',
-              message: 'message.id',
-              emoji: discord.decor.Emojis.EMOJI_TAG,
-              type: 'toggle'
-            },               
-          ] as {
-            role: string;
-            message: string;
-            emoji: discord.decor.Emojis;
-            type: 'once' | 'remove' | 'toggle';
-          }[]
+        mute: {
+          enabled: true
         },
-        commands: {
-          ban: true,
-          banlist: true,
-          slowmode: true,
-          kick: true,
-          tag: {
-            enabled: true,
-            create: true,
-            delete: true,
-            list: true
-          }
-        }
-      },
-      util: {
-        enabled: true,
-        commands: {
-          avatar: true,
-          ping: true,
-          search: true,
-          menu: true
+        unmute: {
+          enabled: true
+        },
+        warn: {
+          enabled: true
         }
       }
     },
-    xp: {
+    admin: {
+      enabled: true,
+      defaultRole: '801125364218200076',
+      muteRole: '801125364218200075',
+      adminRole: '801125364252147744',
+      moderatorRole: '801125364252147743',
+      autoRoles: {
         enabled: true,
-        commands: {
-            top: true,
-            rank: true
+        human: ['801125364218200077'],
+        bot: ['804529912928927794']
+      },
+      commands: {
+        massban: {
+          enabled: true
+        },
+        ban: {
+          enabled: true
+        },
+        banlist: {
+          enabled: true
+        },
+        slowmode: {
+          enabled: true
+        },
+        kick: {
+          enabled: true
+        },
+        tag: {
+          enabled: true,
+          set: true,
+          delete: true
         }
+      }
+    },
+    util: {
+      enabled: true,
+      commands: {
+        avatar: {
+          enabled: true
+        },
+        ping: {
+          enabled: true
+        },
+        search: {
+          enabled: true
+        },
+        plotter: {
+          enabled: true,
+          plot: true
+        },
+        menu: {
+          enabled: true
+        },
+        info: {
+          enabled: true
+        },
+        mc: {
+          enabled: true,
+          status: true
+        },
+        tag: {
+          commands: {
+            enabled: true,
+            set: true,
+            delete: true
+          }
+        }
+      }
+    },
+    economy: {
+      enabled: true,
+      commands: {
+        xp: {
+          enabled: true,
+          top: true,
+          rank: true
+        }
+      }
     },
     social: {
-        enabled: true,
-        commands: {
-            twitter: {
-                enabled: true,
-                sub: true,
-                unsub: true,
-                list: true
-            },
-            reddit: true
+      enabled: true,
+      commands: {
+        twitter: {
+          enabled: true,
+          sub: true,
+          unsub: true,
+          list: true,
+          poll: true
+        },
+        reddit: {
+          enabled: true
         }
-    },
-    messages: messages
+      },
+      messages: messages
+    }
   }
 };
 export default config;
