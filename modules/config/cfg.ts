@@ -2,17 +2,15 @@ import { apiKeys } from './api';
 import { messages } from '../logger/';
 import { img } from './images';
 import { permissions } from './permissions';
-
+ 
 export const config = {
   slashCommands: discord.interactions.commands,
   commands: new discord.command.CommandGroup({
-    defaultPrefix: '~',
+    defaultPrefix: ' ',
     mentionPrefix: true,
-    additionalPrefixes: ['p.']
+    additionalPrefixes: [' ', ' ']
   }),
-  ownerIds: [
-    '465228604721201158' // Nimbi
-  ],
+  ownerIds: [' ', ' '],
   me: {
     user: discord.getBotUser,
     id: discord.getBotId()
@@ -28,13 +26,13 @@ export const config = {
     pylonIcon: img.pylon,
     loadingImage: img.ping
   },
-  guildId: '801125364218200074', // Discord Coding Community
-  welcomeChannel: '801125364646150200',
+  guildId: ' ', 
+  welcomeChannel: ' ',
   modules: {
     logging: {
       enabled: true,
-      timezone: 'America/Phoenix',
-      channel: '844734009623445514', // 📝｜pylon-log
+      timezone: '',
+      channel: ' ',
       showTimestamps: true,
       showEventNames: true,
       scopes: {
@@ -77,23 +75,23 @@ export const config = {
     automated: {
       autopublisher: {
         enabled: true,
-        channels: ['801274126907080704', '844733521561255956'],
+        channels: [' ', ' '],
         announcements: true,
         blacklist: true
       },
       memberCount: {
         updateChannel: {
           enabled: true,
-          channel: '844733697579548712'
+          channel: ' '
         }
       },
       onJoin: {
         enabled: true,
-        channel: '801125364646150200'
+        channel: ' '
       },
       onLeave: {
         enabled: true,
-        channel: '801125364646150200'
+        channel: ' '
       }
     },
     mod: {
@@ -101,7 +99,7 @@ export const config = {
       commands: {
         announce: {
           enabled: true,
-          channel: '801274126907080704'
+          channel: ' '
         },
         mute: {
           enabled: true
@@ -116,14 +114,14 @@ export const config = {
     },
     admin: {
       enabled: true,
-      defaultRole: '801125364218200076',
-      muteRole: '801125364218200075',
-      adminRole: '801125364252147744',
-      moderatorRole: '801125364252147743',
+      defaultRole: ' ',
+      muteRole: ' ',
+      adminRole: ' ',
+      moderatorRole: ' ',
       autoRoles: {
         enabled: true,
-        human: ['801125364218200077'],
-        bot: ['804529912928927794']
+        human: [' '],
+        bot: [' ']
       },
       commands: {
         massban: {
