@@ -9,10 +9,10 @@ const joinLeaveImage = async (
   type: Type,
   member: discord.GuildMember | discord.Event.IGuildMemberRemove
 ) => {
-  const channel = await discord.getGuildTextChannel(
-    config.modules.automated.onJoin.channel
+  const leaveChannel = await discord.getGuildTextChannel(
+    config.modules.automated.onLeave.channel
   );
-  if (!channel) throw new Error('Invalid channel');
+  if (!leaveChannel) throw new Error('Invalid channel');
 
   const code = `
       let avatar = await fetch(avatarURL).then(r => r.arrayBuffer()).then(r => decode(r, true));
@@ -59,22 +59,57 @@ const joinLeaveImage = async (
     method: 'POST'
   });
 
+  const joinChannel = await discord.getGuildTextChannel(
+    config.modules.automated.onJoin.channel
+  );
+
+  if (!joinChannel) throw new Error('Invalid channel');
+
   if (!request.ok) throw new Error(await request.text());
 
-  channel.sendMessage({
-    attachments: [
-      {
-        name: type === Type.JOIN ? 'join.png' : 'leave.png',
-        data: await request.arrayBuffer()
-      }
-    ]
-  });
+  if (Type.JOIN) {
+    let channel = joinChannel;
+    channel.sendMessage({
+      attachments: [
+        {
+          name: type === Type.JOIN ? 'join.png' : 'leave.png',
+          data: await request.arrayBuffer()
+        }
+      ]
+    });
+  } else if (Type.LEAVE) {
+    let channel = leaveChannel;
+    channel.sendMessage({
+      attachments: [
+        {
+          name: type === Type.LEAVE ? 'join.png' : 'leave.png',
+          data: await request.arrayBuffer()
+        }
+      ]
+    });
+  }
 };
 
 discord.on(discord.Event.GUILD_MEMBER_ADD, async (member) => {
-  await joinLeaveImage(Type.JOIN, member);
+  if (
+    !config.modules.automated.onJoin.enabled &&
+    !config.modules.admin.autoRoles.enabled
+  )
+    return;
+
+  if (member.user.bot) {
+    for (let i = 0; i < config.modules.admin.autoRoles.bot.length; i++) {
+      member.addRole(config.modules.admin.autoRoles.bot[i]);
+    }
+  } else {
+    for (let i = 0; i < config.modules.admin.autoRoles.human.length; i++) {
+      member.addRole(config.modules.admin.autoRoles.human[i]);
+    }
+    await joinLeaveImage(Type.JOIN, member);
+  }
 });
 
 discord.on(discord.Event.GUILD_MEMBER_REMOVE, async (member) => {
+  if (!config.modules.automated.onLeave.enabled) return;
   await joinLeaveImage(Type.LEAVE, member);
 });
